@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>About Me - ElysiumAyo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Noto+Sans+JP&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a1128;
+            --bg-darker: #03091c;
+            --text-primary: #6ad4ff;
+            --overlay-gradient: linear-gradient(
+                transparent 0%, 
+                rgba(0, 0, 0, 0.2) 50%, 
+                rgba(0, 0, 0, 0.5) 70%, 
+                black 100%
+            );
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark), var(--bg-darker));
+            font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+            color: rgba(255, 255, 255, 0.8);
+            overscroll-behavior: none;
+            position: relative;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay-gradient);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #graph-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        @keyframes blink {
+            0%, 100% { border-color: transparent; }
+            50% { border-color: var(--text-primary); }
+        }
+
+        @keyframes typing {
+            from { max-width: 0; }
+            to { max-width: 30ch; }
+        }
+
+        .typing-text {
+            position: absolute;
+            font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            padding-right: 5px;
+            border-right: 2px solid var(--text-primary);
+            z-index: 2;
+        }
+
+        #center-name {
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            max-width: 14ch;
+            text-align: center;
+            animation: 
+                typing 4s steps(30, end) forwards,
+                blink 0.7s step-end infinite;
+        }
+
+        #tagline {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            opacity: 0.7;
+            text-align: center;
+            max-width: 30ch;
+            white-space: nowrap;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        #greeting {
+            top: 10px;
+            left: 10px;
+            font-size: 1.5rem;
+            max-width: 30ch;
+            animation: 
+                typing 3s steps(30, end) forwards,
+                blink 0.7s step-end infinite;
+        }
+
+        #bottom-left,
+        #bottom-right {
+            position: absolute;
+            font-size: 1rem;
+            font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+            color: var(--text-primary);
+            z-index: 2;
+        }
+
+        #bottom-left {
+            bottom: 10px;
+            left: 10px;
+        }
+
+        #bottom-right {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        #translate {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+        }
+
+        #translate-button {
+            background: none;
+            color: var(--text-primary);
+            border: none;
+            font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #translate-button:hover {
+            color: white;
+        }
+
+        #translate-symbol {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        a:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            #center-name {
+                font-size: 2rem;
+            }
+
+            #tagline {
+                font-size: 1rem;
+            }
+
+            #greeting {
+                font-size: 1.2rem;
+            }
+
+            #bottom-left,
+            #bottom-right {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #center-name {
+                font-size: 1.5rem;
+            }
+
+            #tagline {
+                font-size: 0.9rem;
+            }
+
+            #greeting {
+                font-size: 1rem;
+            }
+
+            #bottom-left,
+            #bottom-right {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="graph-background"></canvas>
+    
+    <div id="greeting" class="typing-text" 
+         data-en-morning="Good Morning!" 
+         data-en-afternoon="Good Afternoon!" 
+         data-en-evening="Good Evening!" 
+         data-jp-morning="おはようございます！" 
+         data-jp-afternoon="こんにちは！" 
+         data-jp-evening="こんばんは！">
+        Good Morning!
+    </div>
+    
+    <div id="center-name" class="typing-text" 
+         data-en="ElysiumAyo" 
+         data-jp="エリシウムアヨ">
+        ElysiumAyo
+    </div>
+    
+    <div id="tagline" 
+         data-en="Software Developer & Creative Technologist" 
+         data-jp="ソフトウェア開発者とクリエイティブテクノロジスト">
+        Software Developer & Creative Technologist
+    </div>
+    
+    <div id="bottom-left">
+        <a href="https://github.com/elysiumayo" 
+           class="translatable"
+           data-en="GitHub" 
+           data-jp="ギットハブ" 
+           target="_blank">
+            GitHub
+        </a>
+    </div>
+    
+    <div id="bottom-right">
+        <a href="mailto:zen@proton.me"
+           class="translatable"
+           data-en="Email Me" 
+           data-jp="メールする">
+            Email Me
+         </a>
+    </div>
+    
+    <div id="translate">
+        <button id="translate-button" onclick="toggleLanguage()">
+            <span id="translate-symbol">🌐</span>日本語
+        </button>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+
+        function toggleLanguage() {
+            currentLanguage = (currentLanguage === 'en') ? 'jp' : 'en';
+            
+            const centerName = document.getElementById('center-name');
+            const newName = centerName.getAttribute(`data-${currentLanguage}`);
+            updateElementWithAnimation(centerName, newName);
+
+            const tagline = document.getElementById('tagline');
+            const newTagline = tagline.getAttribute(`data-${currentLanguage}`);
+            tagline.textContent = newTagline;
+
+            const links = document.querySelectorAll('.translatable');
+            links.forEach(link => {
+                const newText = link.getAttribute(`data-${currentLanguage}`);
+                link.textContent = newText;
+            });
+
+            const translateButton = document.getElementById('translate-button');
+            translateButton.innerHTML = `<span id="translate-symbol">🌐</span>${(currentLanguage === 'en') ? '日本語' : 'English'}`;
+
+            updateGreeting();
+        }
+
+        function updateElementWithAnimation(element, newText) {
+            element.style.animation = 'none';
+            element.offsetHeight;
+            element.textContent = newText;
+            element.style.animation = `
+                typing 4s steps(30, end) forwards,
+                blink 0.7s step-end infinite
+            `;
+        }
+
+        function updateGreeting() {
+            const greetingEl = document.getElementById('greeting');
+            const now = new Date();
+            const hour = now.getHours();
+            
+            let greetingKey;
+            if (hour < 12) {
+                greetingKey = 'morning';
+            } else if (hour < 18) {
+                greetingKey = 'afternoon';
+            } else {
+                greetingKey = 'evening';
+            }
+
+            const newGreeting = greetingEl.getAttribute(`data-${currentLanguage}-${greetingKey}`);
+            updateElementWithAnimation(greetingEl, newGreeting);
+        }
+
+        function createGraphBackground() {
+            const canvas = document.getElementById('graph-background');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const gridSize = 10;
+            const gridColor = 'rgba(106, 212, 255, 0.1)';
+            const gridLineWidth = 1;
+
+            ctx.strokeStyle = gridColor;
+            ctx.lineWidth = gridLineWidth;
+
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+        }
+
+        createGraphBackground();
+        window.addEventListener('resize', createGraphBackground);
+        updateGreeting();
+    </script>
+</body>
+</html>
