@@ -184,12 +184,12 @@
             padding-right: 5px;
             border-right: 2px solid var(--text-primary);
             z-index: 3;
+            max-width: 0;
         }
 
         .section h2.typing-text {
             animation: typing 2s steps(30, end) forwards,
                         blink 0.7s step-end infinite;
-            max-width: 0;
             display: inline-block;
         }
 
@@ -385,6 +385,7 @@
             element.style.animation = 'none';
             element.offsetHeight; // Trigger reflow
             element.textContent = newText;
+            element.style.maxWidth = '0';
             element.style.animation = `
                 typing 2s steps(30, end) forwards,
                 blink 0.7s step-end infinite
@@ -443,7 +444,14 @@
                     if (entry.isIntersecting) {
                         const headings = entry.target.querySelectorAll('h2.typing-text');
                         headings.forEach(heading => {
-                            heading.style.maxWidth = '30ch';
+                            // Reset animation to ensure it triggers each time the section comes into view
+                            heading.style.animation = 'none';
+                            
+                            // Force reflow to restart animation
+                            heading.offsetHeight;
+                            
+                            // Apply typing animation
+                            heading.style.maxWidth = '0';
                             heading.style.animation = `
                                 typing 2s steps(30, end) forwards,
                                 blink 0.7s step-end infinite
@@ -451,7 +459,9 @@
                         });
                     }
                 });
-            }, { threshold: 0.5 }); // Trigger when at least 50% of the section is visible
+            }, { 
+                threshold: 0.5 // Trigger when at least 50% of the section is visible
+            });
 
             const sections = document.querySelectorAll('.section');
             sections.forEach(section => observer.observe(section));
