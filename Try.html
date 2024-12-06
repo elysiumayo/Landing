@@ -74,7 +74,27 @@
             z-index: 1;
             padding-top: 60px; /* Space for fixed header */
             padding-bottom: 60px; /* Space for fixed footer */
+            scroll-snap-type: y mandatory; /* Enable snap scrolling */
+            scrollbar-width: none; /* Hide scrollbar for modern browsers */
         }
+  
+        #content-scroll-container::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for WebKit browsers */
+        }
+
+        .section {
+             scroll-snap-align: start; /* Snap each section to the start */
+             height: 100vh; /* Ensure sections take full screen height */
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              color: rgba(255, 255, 255, 0.9);
+               max-width: 800px;
+               margin: 0 auto;
+               opacity: 0.9;
+               padding: 0 20px;
+         }
 
         body::after {
             content: '';
@@ -307,21 +327,21 @@
             <div id="how-i-ended-up-here" class="section">
                 <h2>How I Ended Up Here</h2>
                 <p>
-                    I started my journey in technology at a young age, fascinated by how things work. After years of self-study and experimentation, I found my passion in software development and creative technology. This path has led me to various projects and collaborations, shaping my skills and vision.
+                    I started my journey in technol
                 </p>
             </div>
 
             <div id="about-me" class="section">
                 <h2>About Me</h2>
                 <p>
-                    I am a software developer with a keen interest in creative technologies. My background includes experience in web development, application design, and a love for problem-solving. I enjoy working on projects that challenge my skills and allow me to innovate.
+                my skills and allow me to innovate.
                 </p>
             </div>
 
             <div id="future-goals" class="section">
                 <h2>Future Goals</h2>
                 <p>
-                    My future goals include expanding my knowledge in artificial intelligence and machine learning, contributing to open-source projects, and eventually starting my own tech company. I aim to create solutions that make a positive impact on society.
+                     positive impact on society.
                 </p>
             </div>
         </div>
