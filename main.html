@@ -94,6 +94,24 @@
             margin: 0 auto;
             opacity: 0.9;
             padding: 0 20px;
+            position: relative;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            z-index: 5;
+        }
+
+        .scroll-down:hover {
+            opacity: 1;
         }
 
         body::after {
@@ -243,6 +261,40 @@
             #center-name { font-size: 1.5rem; }
             #tagline { font-size: 0.9rem; }
         }
+    #profile-image-container {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 20px;
+        perspective: 1000px;
+    }
+
+    #profile-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--text-primary);
+        transition: transform 0.6s ease;
+        transform-style: preserve-3d;
+    }
+
+    #profile-image-container:hover #profile-image {
+        transform: rotateY(180deg);
+    }
+
+    @media (max-width: 768px) {
+        #profile-image-container {
+            width: 150px;
+            height: 150px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #profile-image-container {
+            width: 120px;
+            height: 120px;
+        }
+    }
     </style>
 </head>
 <body>
@@ -291,6 +343,9 @@
         <div id="content-scroll-container">
             <div id="name-timeline" class="section">
                 <div id="name-container">
+          <div id="profile-image-container">
+    <img src="https://raw.githubusercontent.com/elysiumayo/elysiumayo/refs/heads/main/asset/188542589.png" alt="Profile" id="profile-image">
+</div>
                     <div id="center-name" class="typing-text" 
                          data-en="ElysiumAyo" 
                          data-jp="エリシウムアヨ">
@@ -462,15 +517,41 @@
             }, { 
                 threshold: 0.5 // Trigger when at least 50% of the section is visible
             });
-
             const sections = document.querySelectorAll('.section');
             sections.forEach(section => observer.observe(section));
         }
 
+function addScrollDownSymbols() {
+    const sections = document.querySelectorAll('.section');
+    
+    sections.forEach((section, index) => {
+        // Skip adding scroll symbol to last section
+        if (index === sections.length - 1) return;
+
+        const scrollDownSymbol = document.createElement('div');
+        scrollDownSymbol.classList.add('scroll-down');
+        scrollDownSymbol.innerHTML = '↓';
+        scrollDownSymbol.setAttribute('title', 'Scroll to next section');
+        
+        scrollDownSymbol.addEventListener('click', () => {
+            const contentScrollContainer = document.getElementById('content-scroll-container');
+            const nextSection = sections[index + 1];
+            
+            // Scroll to the next section
+            contentScrollContainer.scrollTo({
+                top: nextSection.offsetTop,
+                behavior: 'smooth'
+            });
+        });
+        
+        section.appendChild(scrollDownSymbol);
+    });
+}
         createGraphBackground();
         window.addEventListener('resize', createGraphBackground);
         updateGreeting();
         setupIntersectionObserver();
+        addScrollDownSymbols();
     </script>
 </body>
 </html>
