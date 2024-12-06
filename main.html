@@ -209,6 +209,7 @@
             animation: typing 2s steps(30, end) forwards,
                         blink 0.7s step-end infinite;
             display: inline-block;
+            font-size: 3rem;
         }
 
         #name-timeline {
@@ -248,17 +249,17 @@
 
         .section p {
             font-size: 1rem;
-            line-height: 1.5;
+            line-height: 4.5;
             margin-bottom: 20px;
         }
 
         @media (max-width: 768px) {
-            #center-name { font-size: 2rem; }
+             #center-name, .section h2.typing-text { font-size: 2rem; }
             #tagline { font-size: 1rem; }
         }
 
         @media (max-width: 480px) {
-            #center-name { font-size: 1.5rem; }
+             #center-name, .section h2.typing-text { font-size: 1.5rem; }
             #tagline { font-size: 0.9rem; }
         }
     #profile-image-container {
@@ -555,3 +556,4 @@ function addScrollDownSymbols() {
     </script>
 </body>
 </html>
+
