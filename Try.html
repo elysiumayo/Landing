@@ -28,7 +28,7 @@
         html, body {
             width: 100%;
             height: 100%;
-            overflow: hidden; /* Prevent body-level scrolling */
+            overflow: hidden;
         }
 
         body {
@@ -72,29 +72,29 @@
             overflow-y: auto;
             position: relative;
             z-index: 1;
-            padding-top: 60px; /* Space for fixed header */
-            padding-bottom: 60px; /* Space for fixed footer */
-            scroll-snap-type: y mandatory; /* Enable snap scrolling */
-            scrollbar-width: none; /* Hide scrollbar for modern browsers */
+            padding-top: 60px;
+            padding-bottom: 60px;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
         }
-  
+
         #content-scroll-container::-webkit-scrollbar {
-            display: none; /* Hide scrollbar for WebKit browsers */
+            display: none;
         }
 
         .section {
-             scroll-snap-align: start; /* Snap each section to the start */
-             height: 100vh; /* Ensure sections take full screen height */
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              color: rgba(255, 255, 255, 0.9);
-               max-width: 800px;
-               margin: 0 auto;
-               opacity: 0.9;
-               padding: 0 20px;
-         }
+            scroll-snap-align: start;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+            padding: 0 20px;
+        }
 
         body::after {
             content: '';
@@ -117,7 +117,7 @@
             pointer-events: none;
             z-index: 0;
         }
-        /* Hyperlink and Button Styling */
+
         #translate-button {
             background: none;
             color: var(--text-primary);
@@ -152,7 +152,6 @@
             text-decoration: none;
         }
 
-        /* Ensure hover effects are visible on fixed header/footer links */
         #bottom-left a,
         #bottom-right a {
             text-decoration: none;
@@ -166,7 +165,6 @@
             color: white;
         }
 
-        /* Rest of the previous styles remain the same, with some modifications */
         @keyframes blink {
             0%, 100% { border-color: transparent; }
             50% { border-color: var(--text-primary); }
@@ -186,6 +184,13 @@
             padding-right: 5px;
             border-right: 2px solid var(--text-primary);
             z-index: 3;
+        }
+
+        .section h2.typing-text {
+            animation: typing 2s steps(30, end) forwards,
+                        blink 0.7s step-end infinite;
+            max-width: 0;
+            display: inline-block;
         }
 
         #name-timeline {
@@ -209,7 +214,7 @@
             max-width: 14ch;
             text-align: center;
             animation: typing 4s steps(30, end) forwards,
-                blink 0.7s step-end infinite;
+                        blink 0.7s step-end infinite;
         }
 
         #tagline {
@@ -223,32 +228,12 @@
             z-index: 2;
         }
 
-        .section {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: rgba(255, 255, 255, 0.9);
-            max-width: 800px;
-            margin: 0 auto;
-            opacity: 0.9;
-            padding: 0 20px;
-        }
-
-        .section h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-
         .section p {
             font-size: 1rem;
             line-height: 1.5;
             margin-bottom: 20px;
         }
 
-        /* Responsive adjustments */
         @media (max-width: 768px) {
             #center-name { font-size: 2rem; }
             #tagline { font-size: 1rem; }
@@ -325,49 +310,71 @@
             </div>
 
             <div id="how-i-ended-up-here" class="section">
-                <h2>How I Ended Up Here</h2>
+                <h2 class="typing-text" 
+                    data-en="How I Ended Up Here" 
+                    data-jp="私の経歴">
+                    How I Ended Up Here
+                </h2>
                 <p>
-                    I started my journey in technol
+                    I started my journey in technology...
                 </p>
             </div>
 
             <div id="about-me" class="section">
-                <h2>About Me</h2>
+                <h2 class="typing-text" 
+                    data-en="About Me" 
+                    data-jp="私について">
+                    About Me
+                </h2>
                 <p>
-                my skills and allow me to innovate.
+                    My skills and interests drive me...
                 </p>
             </div>
 
             <div id="future-goals" class="section">
-                <h2>Future Goals</h2>
+                <h2 class="typing-text" 
+                    data-en="Future Goals" 
+                    data-jp="将来の目標">
+                    Future Goals
+                </h2>
                 <p>
-                     positive impact on society.
+                    Striving to make a positive impact on society...
                 </p>
             </div>
         </div>
     </div>
 
     <script>
-        // Previous JavaScript remains the same
         let currentLanguage = 'en';
 
         function toggleLanguage() {
             currentLanguage = (currentLanguage === 'en') ? 'jp' : 'en';
             
+            // Update name
             const centerName = document.getElementById('center-name');
             const newName = centerName.getAttribute(`data-${currentLanguage}`);
             updateElementWithAnimation(centerName, newName);
 
+            // Update tagline
             const tagline = document.getElementById('tagline');
             const newTagline = tagline.getAttribute(`data-${currentLanguage}`);
             tagline.textContent = newTagline;
 
+            // Update section headings
+            const headings = document.querySelectorAll('.section h2.typing-text');
+            headings.forEach(heading => {
+                const newHeading = heading.getAttribute(`data-${currentLanguage}`);
+                updateElementWithAnimation(heading, newHeading);
+            });
+
+            // Update links and other translatable elements
             const links = document.querySelectorAll('.translatable');
             links.forEach(link => {
                 const newText = link.getAttribute(`data-${currentLanguage}`);
                 link.textContent = newText;
             });
 
+            // Update translate button
             const translateButton = document.getElementById('translate-button');
             translateButton.innerHTML = `<span id="translate-symbol">🌐</span>${(currentLanguage === 'en') ? '日本語' : 'English'}`;
 
@@ -379,7 +386,7 @@
             element.offsetHeight; // Trigger reflow
             element.textContent = newText;
             element.style.animation = `
-                typing 4s steps(30, end) forwards,
+                typing 2s steps(30, end) forwards,
                 blink 0.7s step-end infinite
             `;
         }
@@ -430,9 +437,30 @@
             }
         }
 
+        function setupIntersectionObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const headings = entry.target.querySelectorAll('h2.typing-text');
+                        headings.forEach(heading => {
+                            heading.style.maxWidth = '30ch';
+                            heading.style.animation = `
+                                typing 2s steps(30, end) forwards,
+                                blink 0.7s step-end infinite
+                            `;
+                        });
+                    }
+                });
+            }, { threshold: 0.5 }); // Trigger when at least 50% of the section is visible
+
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => observer.observe(section));
+        }
+
         createGraphBackground();
         window.addEventListener('resize', createGraphBackground);
         updateGreeting();
+        setupIntersectionObserver();
     </script>
 </body>
 </html>
