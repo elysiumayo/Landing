@@ -857,284 +857,208 @@ document.addEventListener('DOMContentLoaded', function () {
         addScrollDownSymbols();
 // JavaScript to handle scroll wheel inside the card container
 document.addEventListener('DOMContentLoaded', function () {
-
     const cardContainer = document.querySelector('.card-container');
 
-
-    class CardScroller {
-
+    class SmoothCardScroller {
         constructor(container) {
-
             this.container = container;
-
             this.cards = Array.from(container.querySelectorAll('.card'));
-
-            this.isDown = false;
-
+            
+            // Interaction state
+            this.isInteracting = false;
             this.startX = 0;
+            this.startScrollLeft = 0;
+            
+            // Momentum scrolling
+            this.velocity = 0;
+            this.momentumRAF = null;
+            
+            // Performance optimization
+            this.lastTouchEvent = null;
+            this.touchThrottle = null;
 
-            this.scrollLeft = 0;
-
-            this.velocityX = 0;
-
-            this.lastX = 0;
-
-            this.lastTime = Date.now();
-
-            this.rafId = null;
-
-
-            this.initEventListeners();
-
+            this.initStyles();
+            this.bindEvents();
         }
 
+        initStyles() {
+            // Ensure smooth scrolling and prevent text selection
+            this.container.style.scrollBehavior = 'smooth';
+            this.container.style.userSelect = 'none';
+            this.container.style.cursor = 'grab';
+        }
 
-        initEventListeners() {
-
+        bindEvents() {
             // Mouse events
-
-            this.container.addEventListener('mousedown', this.handleMouseDown.bind(this));
-
-            this.container.addEventListener('mousemove', this.handleMouseMove.bind(this));
-
-            this.container.addEventListener('mouseup', this.handleInteractionEnd.bind(this));
-
-            this.container.addEventListener('mouseleave', this.handleInteractionEnd.bind(this));
-
+            this.container.addEventListener('mousedown', this.onStart.bind(this));
+            document.addEventListener('mousemove', this.onMove.bind(this));
+            document.addEventListener('mouseup', this.onEnd.bind(this));
 
             // Touch events
+            this.container.addEventListener('touchstart', this.onStart.bind(this), { passive: false });
+            document.addEventListener('touchmove', this.onMove.bind(this), { passive: false });
+            document.addEventListener('touchend', this.onEnd.bind(this), { passive: false });
 
-            this.container.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
-
-            this.container.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
-
-            this.container.addEventListener('touchend', this.handleInteractionEnd.bind(this), { passive: false });
-
-
-            // Wheel/scroll events
-
-            this.container.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
-
+            // Wheel event
+            this.container.addEventListener('wheel', this.onWheel.bind(this), { passive: false });
         }
 
+        getEventX(e) {
+            return e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+        }
 
-        handleMouseDown(e) {
-
-            this.isDown = true;
-
-            this.container.classList.add('active');
-
-            this.startX = e.pageX - this.container.offsetLeft;
-
-            this.scrollLeft = this.container.scrollLeft;
-
-            this.lastX = e.pageX;
-
-            this.lastTime = Date.now();
-
-            
+        onStart(e) {
+            // Prevent default to stop text selection
+            e.preventDefault();
 
             // Stop any ongoing momentum scroll
+            cancelAnimationFrame(this.momentumRAF);
 
-            cancelAnimationFrame(this.rafId);
+            // Update interaction state
+            this.isInteracting = true;
+            this.startX = this.getEventX(e);
+            this.startScrollLeft = this.container.scrollLeft;
+            this.container.style.cursor = 'grabbing';
 
+            // Reset velocity
+            this.velocity = 0;
         }
 
-
-        handleMouseMove(e) {
-
-            if (!this.isDown) return;
-
+        onMove(e) {
+            if (!this.isInteracting) return;
+            
+            // Prevent default to stop scrolling
             e.preventDefault();
 
+            // Throttle move events for performance
+            if (this.touchThrottle) clearTimeout(this.touchThrottle);
             
+            this.touchThrottle = setTimeout(() => {
+                const currentX = this.getEventX(e);
+                const deltaX = (currentX - this.startX) * 1.5; // Adjust sensitivity
+                
+                // Calculate scroll
+                this.container.scrollLeft = this.startScrollLeft - deltaX;
 
-            const x = e.pageX - this.container.offsetLeft;
+                // Calculate velocity for momentum
+                const now = Date.now();
+                const timeDelta = now - (this.lastTouchEvent || now);
+                this.velocity = deltaX / (timeDelta || 1);
 
-            const walk = (x - this.startX) * 2; // Adjust sensitivity
-
-            this.container.scrollLeft = this.scrollLeft - walk;
-
-
-            // Track velocity
-
-            const now = Date.now();
-
-            const dt = now - this.lastTime;
-
-            this.velocityX = (e.pageX - this.lastX) / dt;
-
-            this.lastX = e.pageX;
-
-            this.lastTime = now;
-
+                this.lastTouchEvent = now;
+            }, 0);
         }
 
+        onEnd(e) {
+            if (!this.isInteracting) return;
 
-        handleTouchStart(e) {
+            // Reset interaction state
+            this.isInteracting = false;
+            this.container.style.cursor = 'grab';
 
-            e.preventDefault();
-
-            this.startX = e.touches[0].clientX;
-
-            this.scrollLeft = this.container.scrollLeft;
-
-            this.lastX = this.startX;
-
-            this.lastTime = Date.now();
-
-            
-
-            // Stop any ongoing momentum scroll
-
-            cancelAnimationFrame(this.rafId);
-
-        }
-
-
-        handleTouchMove(e) {
-
-            e.preventDefault();
-
-            const x = e.touches[0].clientX;
-
-            const walk = (x - this.startX) * 1.5; // Adjust sensitivity
-
-            this.container.scrollLeft = this.scrollLeft - walk;
-
-
-            // Track velocity
-
-            const now = Date.now();
-
-            const dt = now - this.lastTime;
-
-            this.velocityX = (x - this.lastX) / dt;
-
-            this.lastX = x;
-
-            this.lastTime = now;
-
-        }
-
-
-        handleWheel(e) {
-
-            e.preventDefault();
-
-            this.container.scrollLeft += e.deltaY; // Use deltaY for horizontal scroll
-
-        }
-
-
-        handleInteractionEnd() {
-
-            if (!this.isDown) return;
-
-            
-
-            this.isDown = false;
-
-            this.container.classList.remove('active');
-
-            
-
-            // Apply momentum scroll
-
-            this.applyMomentumScroll();
-
-            
+            // Apply momentum scrolling
+            this.applyMomentum();
 
             // Snap to nearest card
-
             this.snapToNearestCard();
-
         }
 
+        onWheel(e) {
+            e.preventDefault();
+            
+            // Smooth wheel scrolling
+            this.container.scrollLeft += e.deltaX || e.deltaY;
+        }
 
-        applyMomentumScroll() {
+        applyMomentum() {
+            let speed = this.velocity * 500; // Momentum multiplier
+            
+            const updateMomentum = () => {
+                // Apply friction
+                speed *= 0.95;
 
-            let momentum = this.velocityX * 500; // Adjust momentum factor
+                // Scroll
+                this.container.scrollLeft += speed;
 
-            const decelerate = () => {
-
-                momentum *= 0.95; // Decay factor
-
-                this.container.scrollLeft += momentum;
-
-
-                // Stop when momentum becomes very small
-
-                if (Math.abs(momentum) > 0.5) {
-
-                    this.rafId = requestAnimationFrame(decelerate);
-
+                // Stop when momentum is very low
+                if (Math.abs(speed) > 0.5) {
+                    this.momentumRAF = requestAnimationFrame(updateMomentum);
                 } else {
-
-                    cancelAnimationFrame(this.rafId);
-
+                    cancelAnimationFrame(this.momentumRAF);
+                    this.snapToNearestCard();
                 }
-
             };
 
-
             // Start momentum scroll
-
-            this.rafId = requestAnimationFrame(decelerate);
-
+            this.momentumRAF = requestAnimationFrame(updateMomentum);
         }
-
 
         snapToNearestCard() {
-
+            // Calculate the center of the container
             const containerCenter = this.container.scrollLeft + (this.container.clientWidth / 2);
-
             
-
+            // Find the closest card
             let closestCard = this.cards[0];
-
             let minDistance = Infinity;
 
-
             this.cards.forEach(card => {
-
-                const cardCenter = card .offsetLeft + (card.clientWidth / 2);
-
+                const cardCenter = card.offsetLeft + (card.clientWidth / 2);
                 const distance = Math.abs(cardCenter - containerCenter);
-
                 
-
                 if (distance < minDistance) {
-
                     minDistance = distance;
-
                     closestCard = card;
-
                 }
-
             });
-
 
             // Smooth scroll to the closest card
-
             this.container.scrollTo({
-
                 left: closestCard.offsetLeft - (this.container.clientWidth / 2) + (closestCard.clientWidth / 2),
-
                 behavior: 'smooth'
-
             });
-
         }
 
+        // Optional: Add keyboard navigation
+        setupKeyboardNavigation() {
+            document.addEventListener('keydown', (e) => {
+                switch(e.key) {
+                    case 'ArrowRight':
+                        this.navigateCard('next');
+                        break;
+                    case 'ArrowLeft':
+                        this.navigateCard('prev');
+                        break;
+                }
+            });
+        }
+
+        navigateCard(direction) {
+            const currentScroll = this.container.scrollLeft;
+            const containerWidth = this.container.clientWidth;
+            
+            let targetCard;
+            if (direction === 'next') {
+                targetCard = this.cards.find(card => card.offsetLeft > currentScroll + containerWidth / 2);
+            } else {
+                targetCard = this.cards.reverse().find(card => card.offsetLeft < currentScroll - containerWidth / 2);
+                this.cards.reverse(); // restore original order
+            }
+
+            if (targetCard) {
+                this.container.scrollTo({
+                    left: targetCard.offsetLeft - (this.container.clientWidth / 2) + (targetCard.clientWidth / 2),
+                    behavior: 'smooth'
+                });
+            }
+        }
     }
 
-
-    // Initialize the card scroller
-
-    const cardScroller = new CardScroller(cardContainer);
-
-}); 
+    // Initialize the smooth card scroller
+    const smoothCardScroller = new SmoothCardScroller(cardContainer);
+    
+    // Optional: Setup keyboard navigation
+    smoothCardScroller.setupKeyboardNavigation();
+});
 
     </script>
 </body>
