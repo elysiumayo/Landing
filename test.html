@@ -323,19 +323,10 @@
     padding: 20px;
     box-sizing: border-box;
     position: relative;
-    cursor: grab;
-    -ms-overflow-style: none;
 }
 
 .card-container::-webkit-scrollbar {
     display: none;
-}
-
-
-.card-container:active {
-
-    cursor: grabbing;
-
 }
 
 .card {
@@ -606,7 +597,7 @@
 
             data-jp="私のカスタムカード">
 
-            My Custom Cards
+            My works
 
         </h2>
 
@@ -618,15 +609,15 @@
 
             <div class="card">
 
-                <img src="https://via.placeholder.com/300x200" alt="Card Image 1">
+                <img src="https://user-images.githubusercontent.com/19492564/147341323-3c5cfd08-1f66-4555-b21f-038f063bcf44.png" alt="Card Image 1">
 
                 <div class="card-content">
 
-                    <h2>Card Heading 1</h2>
+                    <h2>Rofi</h2>
 
-                    <p>Lorem ipsum dolor sit amet.</p>
+                    <p>A good looking rofi-wifi-menue with custom .rasi file </p>
 
-                    <a href="#" class="button">Find out more</a>
+                    <a href="https://github.com/elysiumayo/Rofi-networkmanager.git" class="button">Find out more</a>
 
                 </div>
 
@@ -637,15 +628,15 @@
 
             <div class="card">
 
-                <img src="https://via.placeholder.com/300x200" alt="Card Image 2">
+                <img src="https://raw.githubusercontent.com/elysiumayo/elysiumayo/refs/heads/main/page/arch.jpg" alt="Card Image 2">
 
                 <div class="card-content">
 
-                    <h2>Card Heading 2</h2>
+                    <h2>Arch-Setup</h2>
 
-                    <p>Lorem ipsum dolor sit amet.</p>
+                    <p>Compilation of scripts for seting up Arch-linux</p>
 
-                    <a href="#" class="button">Find out more</a>
+                    <a href="https://github.com/elysiumayo/Artix-Optimizations.git" class="button">Find out more</a>
 
                 </div>
 
@@ -656,15 +647,15 @@
 
             <div class="card">
 
-                <img src="https://via.placeholder.com/300x200" alt="Card Image 3">
+                <img src="https://raw.githubusercontent.com/elysiumayo/elysiumayo/refs/heads/main/page/artix.png" alt="Card Image 3">
 
                 <div class="card-content">
 
-                    <h2>Card Heading 3</h2>
+                  <h2> Artix-optimizer</h2>
 
-                    <p>Lorem ipsum dolor sit amet.</p>
+                    <p>Optimization for artixlinux packages grom their githea repo<</p>
 
-                    <a href="#" class="button">Find out more</a>
+                    <a href="https://github.com/elysiumayo/Artix-Optimizations.git" class="button">Find out more</a>
 
                 </div>
 
@@ -675,15 +666,15 @@
 
             <div class="card">
 
-                <img src="https://via.placeholder.com/300x200" alt="Card Image 4">
+                <img src="https://raw.githubusercontent.com/elysiumayo/elysiumayo/refs/heads/main/page/122.png" alt="Card Image 4">
 
                 <div class="card-content">
 
-                    <h2>Card Heading 4</h2>
+                    <h2>Dotfiles</h2>
 
-                    <p>Lorem ipsum dolor sit amet.</p>
+                    <p>Customization for hyprland and artix or arch linux</p>
 
-                    <a href="#" class="button">Find out more</a>
+                    <a href="https://github.com/elysiumayo/Arch-dotfiles.git" class="button">Find out more</a>
 
                 </div>
 
@@ -868,70 +859,88 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     const cardContainer = document.querySelector('.card-container');
 
-    class SimpleCardScroller {
+    class CardScroller {
         constructor(container) {
             this.container = container;
             this.cards = Array.from(container.querySelectorAll('.card'));
-            
-            // Interaction state
-            this.isDragging = false;
+            this.isDown = false;
             this.startX = 0;
             this.scrollLeft = 0;
+            this.velocityX = 0;
+            this.lastX = 0;
+            this.lastTime = Date.now();
+            this.rafId = null;
 
-            this.initializeStyles();
-            this.bindEvents();
+            this.initEventListeners();
         }
 
-        initializeStyles() {
-            this.container.style.overscrollBehavior = 'contain';
-            this.container.style.scrollSnapType = 'x mandatory';
-            this.container.style.WebkitOverflowScrolling = 'touch';
-        }
-
-        bindEvents() {
+        initEventListeners() {
             // Mouse events
-            this.container.addEventListener('mousedown', this.startDragging.bind(this));
-            this.container.addEventListener('mousemove', this.drag.bind(this));
-            this.container.addEventListener('mouseup', this.stopDragging.bind(this));
-            this.container.addEventListener('mouseleave', this.stopDragging.bind(this));
+            this.container.addEventListener('mousedown', this.handleMouseDown.bind(this));
+            this.container.addEventListener('mousemove', this.handleMouseMove.bind(this));
+            this.container.addEventListener('mouseup', this.handleInteractionEnd.bind(this));
+            this.container.addEventListener('mouseleave', this.handleInteractionEnd.bind(this));
 
             // Touch events
-            this.container.addEventListener('touchstart', this.startDragging.bind(this), { passive: false });
-            this.container.addEventListener('touchmove', this.drag.bind(this), { passive: false });
-            this.container.addEventListener('touchend', this.stopDragging.bind(this), { passive: false });
+            this.container.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
+            this.container.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
+            this.container.addEventListener('touchend', this.handleInteractionEnd.bind(this), { passive: false });
 
-            // Wheel event
+            // Wheel/scroll events
             this.container.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
         }
 
-        getClientX(e) {
-            return e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-        }
-
-        startDragging(e) {
-            this.isDragging = true;
-            this.startX = this.getClientX(e);
+        handleMouseDown(e) {
+            this.isDown = true;
+            this.container.classList.add('active');
+            this.startX = e.pageX - this.container.offsetLeft;
             this.scrollLeft = this.container.scrollLeft;
+            this.lastX = e.pageX;
+            this.lastTime = Date.now();
             
-            // Prevent default to stop text selection
-            e.preventDefault();
+            // Stop any ongoing momentum scroll
+            cancelAnimationFrame(this.rafId);
         }
 
-        drag(e) {
-            if (!this.isDragging) return;
-            
+        handleMouseMove(e) {
+            if (!this.isDown) return;
             e.preventDefault();
-            const currentX = this.getClientX(e);
-            const walk = (currentX - this.startX) * 2; // Adjust multiplier for sensitivity
             
+            const x = e.pageX - this.container.offsetLeft;
+            const walk = (x - this.startX) * 2;
             this.container.scrollLeft = this.scrollLeft - walk;
+
+            // Track velocity
+            const now = Date.now();
+            const dt = now - this.lastTime;
+            this.velocityX = (e.pageX - this.lastX) / dt;
+            this.lastX = e.pageX;
+            this.lastTime = now;
         }
 
-        stopDragging(e) {
-            if (!this.isDragging) return;
+        handleTouchStart(e) {
+            e.preventDefault();
+            this.startX = e.touches[0].clientX;
+            this.scrollLeft = this.container.scrollLeft;
+            this.lastX = this.startX;
+            this.lastTime = Date.now();
             
-            this.isDragging = false;
-            this.snapToNearestCard();
+            // Stop any ongoing momentum scroll
+            cancelAnimationFrame(this.rafId);
+        }
+
+        handleTouchMove(e) {
+            e.preventDefault();
+            const x = e.touches[0].clientX;
+            const walk = (x - this.startX) * 1.5;
+            this.container.scrollLeft = this.scrollLeft - walk;
+
+            // Track velocity
+            const now = Date.now();
+            const dt = now - this.lastTime;
+            this.velocityX = (x - this.lastX) / dt;
+            this.lastX = x;
+            this.lastTime = now;
         }
 
         handleWheel(e) {
@@ -939,11 +948,41 @@ document.addEventListener('DOMContentLoaded', function () {
             this.container.scrollLeft += e.deltaX || e.deltaY;
         }
 
+        handleInteractionEnd() {
+            if (!this.isDown) return;
+            
+            this.isDown = false;
+            this.container.classList.remove('active');
+            
+            // Apply momentum scroll
+            this.applyMomentumScroll();
+            
+            // Snap to nearest card
+            this.snapToNearestCard();
+        }
+
+        applyMomentumScroll() {
+            let momentum = this.velocityX * 500;
+            const decelerate = () => {
+                momentum *= 0.95;
+                this.container.scrollLeft += momentum;
+
+                // Stop when momentum becomes very small
+                if (Math.abs(momentum) > 0.5) {
+                    this.rafId = requestAnimationFrame(decelerate);
+                } else {
+                    cancelAnimationFrame(this.rafId);
+                }
+            };
+
+            // Start momentum scroll
+            this.rafId = requestAnimationFrame(decelerate);
+        }
+
         snapToNearestCard() {
-            // Calculate the center of the container
+            // Find the card closest to the center of the container
             const containerCenter = this.container.scrollLeft + (this.container.clientWidth / 2);
             
-            // Find the closest card
             let closestCard = this.cards[0];
             let minDistance = Infinity;
 
@@ -964,6 +1003,33 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
+        // Advanced card interaction methods
+        setupCardInteractions() {
+            this.cards.forEach(card => {
+                // Add hover effects
+                card.addEventListener('mouseenter', () => {
+                    card.classList.add('card-hover');
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.classList.remove('card-hover');
+                });
+
+                // Add click/tap interaction
+                card.addEventListener('click', () => {
+                    // Center the clicked card
+                    this.centerCard(card);
+                });
+            });
+        }
+
+        centerCard(card) {
+            this.container.scrollTo({
+                left: card.offsetLeft - (this.container.clientWidth / 2) + (card.clientWidth / 2),
+                behavior: 'smooth'
+            });
+        }
+
         // Keyboard navigation
         setupKeyboardNavigation() {
             document.addEventListener('keydown', (e) => {
@@ -979,32 +1045,37 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         navigateCard(direction) {
-            const currentIndex = this.cards.findIndex(card => 
-                card.offsetLeft > this.container.scrollLeft
-            );
-
-            let targetIndex;
+            const currentScroll = this.container.scrollLeft;
+            const containerWidth = this.container.clientWidth;
+            
+            let targetCard;
             if (direction === 'next') {
-                targetIndex = Math.min(currentIndex + 1, this.cards.length - 1);
+                targetCard = this.cards.find(card => card.offsetLeft > currentScroll + containerWidth / 2);
             } else {
-                targetIndex = Math.max(currentIndex - 1, 0);
+                targetCard = this.cards.reverse().find(card => card.offsetLeft < currentScroll - containerWidth / 2);
+                this.cards.reverse(); // restore original order
             }
 
-            const targetCard = this.cards[targetIndex];
-            this.container.scrollTo({
-                left: targetCard.offsetLeft,
-                behavior: 'smooth'
-            });
+            if (targetCard) {
+                this.centerCard(targetCard);
+            }
         }
     }
 
     // Initialize the card scroller
-    const cardScroller = new SimpleCardScroller(cardContainer);
+    const cardScroller = new CardScroller(cardContainer);
+    cardScroller.setupCardInteractions();
     cardScroller.setupKeyboardNavigation();
+
+    // Responsive resize handling
+    function handleResize() {
+        // Recalculate card positions on window resize
+        cardScroller.snapToNearestCard();
+    }
+
+    window.addEventListener('resize', handleResize);
 });
+
     </script>
 </body>
 </html>
-
-
-
