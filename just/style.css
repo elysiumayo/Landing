@@ -1,565 +1,161 @@
-/* Root Variables */
-
-:root {
-
-    /* Color Palette */
-
-    --bg-primary: #0a0c1a;
-
-    --bg-secondary: #121630;
-
-    --text-primary: #ffffff;
-
-    --text-secondary: #b0b8d0;
-
-    --accent-primary: #3498db;
-
-    --accent-secondary: #8e44ad;
-
-    
-
-    /* Project Card Colors */
-
-    --card-bg: #1e2348;
-
-    --card-text: #ffffff;
-
-    --card-border: rgba(255,255,255,0.1);
-
-    
-
-    /* Spacing */
-
-    --space-xs: 0.5rem;
-
-    --space-sm: 1rem;
-
-    --space-md: 1.5rem;
-
-    --space-lg: 2rem;
-
-    --space-xl: 3rem;
-
-}
-
-
-/* Global Reset and Base Styles */
-
-*, *::before, *::after {
-
-    margin: 0;
-
-    padding: 0;
-
-    box-sizing: border-box;
-
-}
-
-
+/* General reset for full-page layout */
+body,
 html {
-
-    scroll-behavior: smooth;
-
-    overflow-x: hidden;
-
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
 }
 
-
-body {
-
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-
-    background: transparent ;
-
-    color: var(--text-primary);
-
-    line-height: 1.6;
-
-    overscroll-behavior-y: none;
-
+/* Fixed gridline background */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Keeps canvas behind content */
 }
 
-
-/* Scroll Container */
-
-.scroll-container {
-
-    width: 100%;
-
-    height: 100vh;
-
-    overflow-y: scroll;
-
-    scroll-snap-type: y mandatory;
-
-    -webkit-overflow-scrolling: touch;
-
-    overscroll-behavior-y: none;
-
+/* Section styling */
+.sections {
+  scroll-snap-type: y mandatory; /* Enables smooth section snapping */
+  height: 100vh;
+  overflow-y: scroll;
 }
 
-
-/* Sections with Scroll Snap */
-
-.section {
-
-    width: 100%;
-
-    height: 100vh;
-
-    scroll-snap-align: start;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    position: relative;
-
-    overflow: hidden;
-
-    padding: var(--space-lg);
-
+section {
+  height: 100vh; /* Each section takes up full screen */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: bold;
+  scroll-snap-align: start; /* Ensures each section aligns perfectly */
+  background: transparent; /* Allows the grid to show through */
+  color: #333;
+  border-bottom: 1px solid #ddd; /* Optional: Section separation */
 }
 
-
-/* Background Grid Canvas */
-
-#graphCanvas {
-
-    position: fixed;
-
-    top: 0;
-
-    left: 0;
-
-    z-index: -1;
-
-    width: 100%;
-
-    height: 100%;
-
-    pointer-events: none;
-
+/* General reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-
-/* Section Content */
-
-.section .content {
-
-    width: 100%;
-
-    max-width: 1200px;
-
-    text-align: center;
-
-    z-index: 10;
-
-    position: relative;
-
+/* Section Container */
+#section6 {
+  padding: 1rem;
+  overflow: hidden;
 }
 
-
-.section h1 {
-
-    font-size: 2.5rem;
-
-    margin-bottom: var(--space-md);
-
-    color: var(--text-primary);
-
-    text-shadow: 0 4px 6px rgba(0,0,0,0.2);
-
-}
-
-
-.section p {
-
-    font-size: 1rem;
-
-    color: var(--text-secondary);
-
-    max-width: 600px;
-
-    margin: 0 auto;
-
-}
-
-
-/* Social Links */
-
-.social-links {
-
-    display: flex;
-
-    justify-content: center;
-
-    gap: var(--space-md);
-
-    margin-top: var(--space-lg);
-
-}
-
-
-.social-link {
-
-    text-decoration: none;
-
-    color: var(--text-primary);
-
-    padding: var(--space-sm) var(--space-md);
-
-    border: 2px solid var(--accent-primary);
-
-    border-radius: 25px;
-
-    transition: all 0.3s ease;
-
-}
-
-
-.social-link:hover {
-
-    background-color: var(--accent-primary);
-
-    transform: translateY(-3px);
-
-}
-
-
-/* Horizontal Project Card Container */
-
+/* Cards Scroll Container */
 .card-container {
-
-    display: flex;
-
-    flex-direction: row;
-
-    align-items: center;
-
-    gap: var(--space-md);
-
-    width: 100%;
-
-    max-width: 100%;
-
-    overflow-x: auto;
-
-    padding: var(--space-lg) 0;
-
-    scroll-snap-type: x mandatory;
-
-    -webkit-overflow-scrolling: touch;
-
+  display: flex;
+  gap: 1.5rem; /* Space between cards */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory; /* Horizontal smooth scrolling */
+  padding: 1rem;
 }
 
-
-/* Hide Scrollbar but Keep Functionality */
-
-.card-container::-webkit-scrollbar {
-
-    display: none;
-
+/* Single Card */
+.card {
+  flex: 0 0 80%; /* Default to full card in mobile view */
+  max-width: 350px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  scroll-snap-align: start;
+  transition: transform 0.2s ease;
 }
 
-
-.card-container {
-
-    -ms-overflow-style: none;  /* IE and Edge */
-
-    scrollbar-width: none;  /* Firefox */
-
+.card:hover {
+  transform: translateY(-5px);
 }
 
-
-/* Project Card */
-
-.project-card {
-
-    flex: 0 0 auto;
-
-    width: 300px;
-
-    height: 400px;
-
-    background: var(--card-bg);
-
-    border-radius: 15px;
-
-    overflow: hidden;
-
-    position: relative;
-
-    transition: all 0.3s ease;
-
-    display: flex;
-
-    flex-direction: column;
-
-    scroll-snap-align: center;
-
-    box-shadow: 
-
-        0 10px 20px rgba(0,0,0,0.2),
-
-        0 6px 10px rgba(0,0,0,0.1);
-
-    transform: perspective(1000px);
-
-    will-change: transform;
-
+/* Card Image */
+.card__img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
-
-/* Hover and Interaction Effects */
-
-.project-card:hover {
-
-    transform: 
-
-        scale(1.05) 
-
-        rotateY(10deg);
-
-    box-shadow: 
-
-        0 15px 30px rgba(0,0,0,0.3),
-
-        0 10px 20px rgba(0,0,0,0.2);
-
+/* Card Content */
+.card__content {
+  padding: 1rem;
 }
 
-
-/* Project Image */
-
-.project-image {
-
-    width: 100%;
-
-    height: 200px;
-
-    object-fit: cover;
-
+.card__header {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
-
-/* Project Details */
-
-.project-details {
-
-    padding: var(--space-md);
-
-    display: flex;
-
-    flex-direction: column;
-
-    flex-grow: 1;
-
+.card__text-wrapper p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 1rem;
 }
 
-
-.project-name {
-
-    font-size: 1.5rem;
-
-    font-weight: 700;
-
-    color: var(--text-primary);
-
-    margin-bottom: var(--space-sm);
-
-    text-align: center;
-
+.card__btn {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.6rem 1rem;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-
-/* Project Type Tags */
-
-.project-types {
-
-    display: flex;
-
-    justify-content: center;
-
-    gap: var(--space-xs);
-
-    margin-bottom: var(--space-md);
-
+.card__btn:hover {
+  background-color: #0056b3;
 }
 
-
-.project-type {
-
-    padding: 0.3rem 0.6rem;
-
-    border-radius: 20px;
-
-    font-size: 0.7rem;
-
-    font-weight: 600;
-
-    text-transform: uppercase;
-
-    color: white;
-
+/* Medium Devices (Tablets) */
+@media (min-width: 576px) {
+  .card {
+    flex: 0 0 60%;
+  }
 }
 
-
-.type-frontend { background-color: #3498db; }
-
-.type-backend { background-color: #2ecc71; }
-
-.type-fullstack { background-color: #e74c3c; }
-
-.type-mobile { background-color: #f39c12; }
-
-
-/* Project Description */
-
-.project-description {
-
-    color: var(--text-secondary);
-
-    text-align: center;
-
-    margin-bottom: var(--space-md);
-
-    flex-grow: 1;
-
-    font-size: 0.9rem;
-
-    line-height: 1.5;
-
+/* Large Devices (Desktops) */
+@media (min-width: 768px) {
+  .card {
+    flex: 0 0 40%;
+  }
 }
 
-
-/* Project Links */
-
-.project-links {
-
-    display: flex;
-
-    justify-content: center;
-
-    gap: var(--space-sm);
-
-    margin-top: auto;
-
-    padding-bottom: var(--space-sm);
-
+/* Extra Large Devices (Widescreen Desktops) */
+@media (min-width: 1024px) {
+  .card {
+    flex: 0 0 30%;
+  }
 }
 
-
-.project-link {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 0.5rem;
-
-    padding: 0.5rem 1rem;
-
-    background-color: var(--accent-primary);
-
-    color: white;
-
-    text-decoration: none;
-
-    border-radius: 25px;
-
-    font-weight: 600;
-
-    transition: all 0.3s ease;
-
+/* Super Wide Devices */
+@media (min-width: 1440px) {
+  .card {
+    flex: 0 0 25%;
+  }
 }
 
-
-.project-link:hover {
-
-    background-color: var(--accent-secondary);
-
-    transform: translateY(-3px);
-
-}
-
-
-/* Scrollbar Styling */
-
-.scroll-container::-webkit-scrollbar {
-
-    width: 8px; height: 8px;
-
-}
-
-
-.scroll-container::-webkit-scrollbar-thumb {
-
-    background: var(--accent-primary);
-
-    border-radius: 10px;
-
-}
-
-
-.scroll-container::-webkit-scrollbar-track {
-
-    background: var(--bg-secondary);
-
-}
-
-
-/* Media Queries for Responsiveness */
-
+/* Responsiveness for Section Headings */
 @media (max-width: 768px) {
-
-    .section h1 {
-
-        font-size: 1rem;
-
-    }
-
-
-    .project-card {
-
-        width: 85%;
-
-        height: auto;
-
-    }
-
-
-    .social-link {
-
-        padding: var(--space-xs) var(--space-sm);
-
-    }
-
+  .section-heading {
+    font-size: 2.5rem;
+  }
 }
-
 
 @media (max-width: 480px) {
-
-    .section h1 {
-
-        font-size: 1.5rem;
-
-    }
-
-
-    .project-name {
-
-        font-size: 1.2rem;
-
-    }
-
-
-    .project-description {
-
-        font-size: 0.8rem;
-
-    }
+  .section-heading {
+    font-size: 2rem;
+  }
+}
