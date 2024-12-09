@@ -1,146 +1,167 @@
-* {
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body, html {
-    height: 100%;
-    width: 100%;
-    overflow: hidden; /* Prevent default scrolling */
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-color:#181923  ;
 }
 
 .transparent-box {
-    width: 100%; /* Reduce width to account for the margin on both sides */
-    height: 100%; 
-    padding: 50px;
-    border: 2px solid #ff5733;
-    position: fixed; /* Fixed position for the box */
-    top: 0;
-    left: 0;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 2px solid #f69197 ;
     box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none; /* Allow interaction with elements under the box */
-}
-
-main {
-    height: 100vh; /* Full viewport height */
-    overflow-y: scroll; /* Allow scrolling through sections */
-    scroll-snap-type: y mandatory; /* Enable snapping between sections */
-    scroll-behavior: smooth; /* Enable smooth scrolling */
+    background: transparent;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
 }
 
 .section {
-    height: 100vh; /* Each section takes full height of the viewport */
-    width: 100%; /* Full width */
-    flex-shrink: 0;
+    width: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    scroll-snap-align: start;
     font-size: 2rem;
-    font-weight: bold;
-    color: #ff5733; /* Matches the border color */
-    background-color: transparent; /* Transparent background */
-    scroll-snap-align: start; /* Align sections to the top of the viewport */
+    background-color: transparent;
 }
 
-/* Hide scrollbar for WebKit browsers (Chrome, Safari) */
-main::-webkit-scrollbar {
+/* Optional: Hide scrollbar while keeping functionality */
+.transparent-box::-webkit-scrollbar {
     display: none;
 }
 
-/* Hide scrollbar for Firefox */
-main {
-    scrollbar-width: none; /* Firefox */
+.transparent-box {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 
-.github-link, .email-link {
-    position: fixed;
-    color: #ff5733;
-    text-decoration: none;
-    font-size: 20px;
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+#section1 {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    z-index: 10;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-.github-link {
-    bottom: 25px;
-    left: 32px;
-    transform: rotate(270deg);
-    transform-origin: bottom left;
-}
-
-.github-link i {
-    margin-right: 8px;
-}
-
-.email-link {
-    bottom: 135px;
-    left: 32px;
-    transform: rotate(270deg);
-    transform-origin: bottom left;
-}
-
-.email-link i {
-    margin-right: 8px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .github-link, .email-link {
-        font-size: 16px;
-        bottom: 20px;
-        left: 24px;
-    }
-    .email-link {
-        bottom: 120px;
-    }
-}
-
-/* Container for the profile image */
 .profile-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
-/* Profile image styling */
+.profile-image-wrapper {
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #ffffff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
 .profile-image {
-    width: 370px; /* Default size of the image */
-    height: 370px; /* Make the height and width the same for circular shape */
-    border-radius: 50%; /* Makes the image circular */
-    border: 3px solid #ff5733; /* Default border color */
-    object-fit: cover; /* Ensures the image covers the area without distortion */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.profile-image-wrapper:hover {
+    transform: scale(1.05);
+}
+
+.tagline-container {
+    text-align: center;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.tagline {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2vw;
+    color:#ffc4b8  ;
     position: relative;
-    top: -130px; /* Adjust this value to move the image upwards */
-    transition: all 0.4s ease; /* Smooth transition for border changes */
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    margin: 0 auto;
+    max-width: 100%;
+    animation: typing 3s steps(40, end) forwards,
+               blink-caret 0.75s step-end infinite;
 }
 
-/* Hover effect for animated border */
-.profile-image:hover {
-    border-color: #4CAF50; /* Change border color when hovered */
-    border-width: 3px; /* Increase border width on hover */
-    transform: scale(1.1); /* Slightly scale the image when hovered */
-}
+/* Responsive Adjustments */
+@media screen and (max-width: 1200px) {
+    .profile-image-wrapper {
+        width: 300px;
+        height: 300px;
+    }
 
-/* Media query for screens smaller than 600px */
-@media (max-width: 600px) {
-    .profile-image {
-        width: 260px; /* Reduce the size for smaller screens */
-        height: 260px; /* Make the height and width the same for circular shape */
-        top: -90px; /* Adjust the image slightly upwards */
+    .tagline {
+        font-size: 5vw;
     }
 }
 
-/* Media query for screens smaller than 400px */
-@media (max-width: 400px) {
-    .profile-image {
-        width: 200px; /* Further reduce the size for very small screens */
-        height: 200px; /* Make the height and width the same for circular shape */
-        top: -90px; /* Center the image if necessary */
+@media screen and (max-width: 768px) {
+    .profile-image-wrapper {
+        width: 200px;
+        height: 200px;
+    }
+
+    .tagline {
+        font-size: 5vw;
     }
 }
+
+@media screen and (max-width: 480px) {
+    .profile-image-wrapper {
+        width: 120px;
+        height: 120px;
+    }
+
+    .tagline {
+        font-size: 5vw;
+        line-height: 1.2;
+    }
+}
+
+/* Typing and Blinking Animations (Previous CSS remains the same) */
+@keyframes typing {
+    from { 
+        width: 0;
+        max-width: 0;
+    }
+    to { 
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: rgba(0,0,0,0.7) }
+}
+
+.tagline::after {
+    content: '|';
+    animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* animation*/
+
