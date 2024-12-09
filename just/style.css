@@ -1,161 +1,146 @@
-/* General reset for full-page layout */
-body,
-html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  font-family: Arial, sans-serif;
-}
-
-/* Fixed gridline background */
-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1; /* Keeps canvas behind content */
-}
-
-/* Section styling */
-.sections {
-  scroll-snap-type: y mandatory; /* Enables smooth section snapping */
-  height: 100vh;
-  overflow-y: scroll;
-}
-
-section {
-  height: 100vh; /* Each section takes up full screen */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2rem;
-  font-weight: bold;
-  scroll-snap-align: start; /* Ensures each section aligns perfectly */
-  background: transparent; /* Allows the grid to show through */
-  color: #333;
-  border-bottom: 1px solid #ddd; /* Optional: Section separation */
-}
-
-/* General reset */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Section Container */
-#section6 {
-  padding: 1rem;
-  overflow: hidden;
+body, html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Prevent default scrolling */
 }
 
-/* Cards Scroll Container */
-.card-container {
-  display: flex;
-  gap: 1.5rem; /* Space between cards */
-  overflow-x: auto;
-  scroll-snap-type: x mandatory; /* Horizontal smooth scrolling */
-  padding: 1rem;
+.transparent-box {
+    width: 100%; /* Reduce width to account for the margin on both sides */
+    height: 100%; 
+    padding: 50px;
+    border: 2px solid #ff5733;
+    position: fixed; /* Fixed position for the box */
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none; /* Allow interaction with elements under the box */
 }
 
-/* Single Card */
-.card {
-  flex: 0 0 80%; /* Default to full card in mobile view */
-  max-width: 350px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  scroll-snap-align: start;
-  transition: transform 0.2s ease;
+main {
+    height: 100vh; /* Full viewport height */
+    overflow-y: scroll; /* Allow scrolling through sections */
+    scroll-snap-type: y mandatory; /* Enable snapping between sections */
+    scroll-behavior: smooth; /* Enable smooth scrolling */
 }
 
-.card:hover {
-  transform: translateY(-5px);
-}
-
-/* Card Image */
-.card__img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-}
-
-/* Card Content */
-.card__content {
-  padding: 1rem;
-}
-
-.card__header {
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.card__text-wrapper p {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: #555;
-  margin-bottom: 1rem;
-}
-
-.card__btn {
-  display: inline-block;
-  margin-top: 0.5rem;
-  padding: 0.6rem 1rem;
-  background-color: #007bff;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.card__btn:hover {
-  background-color: #0056b3;
-}
-
-/* Medium Devices (Tablets) */
-@media (min-width: 576px) {
-  .card {
-    flex: 0 0 60%;
-  }
-}
-
-/* Large Devices (Desktops) */
-@media (min-width: 768px) {
-  .card {
-    flex: 0 0 40%;
-  }
-}
-
-/* Extra Large Devices (Widescreen Desktops) */
-@media (min-width: 1024px) {
-  .card {
-    flex: 0 0 30%;
-  }
-}
-
-/* Super Wide Devices */
-@media (min-width: 1440px) {
-  .card {
-    flex: 0 0 25%;
-  }
-}
-
-/* Responsiveness for Section Headings */
-@media (max-width: 768px) {
-  .section-heading {
-    font-size: 2.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .section-heading {
+.section {
+    height: 100vh; /* Each section takes full height of the viewport */
+    width: 100%; /* Full width */
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 2rem;
-  }
+    font-weight: bold;
+    color: #ff5733; /* Matches the border color */
+    background-color: transparent; /* Transparent background */
+    scroll-snap-align: start; /* Align sections to the top of the viewport */
+}
+
+/* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+main::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for Firefox */
+main {
+    scrollbar-width: none; /* Firefox */
+}
+
+.github-link, .email-link {
+    position: fixed;
+    color: #ff5733;
+    text-decoration: none;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+}
+
+.github-link {
+    bottom: 25px;
+    left: 32px;
+    transform: rotate(270deg);
+    transform-origin: bottom left;
+}
+
+.github-link i {
+    margin-right: 8px;
+}
+
+.email-link {
+    bottom: 135px;
+    left: 32px;
+    transform: rotate(270deg);
+    transform-origin: bottom left;
+}
+
+.email-link i {
+    margin-right: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .github-link, .email-link {
+        font-size: 16px;
+        bottom: 20px;
+        left: 24px;
+    }
+    .email-link {
+        bottom: 120px;
+    }
+}
+
+/* Container for the profile image */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Profile image styling */
+.profile-image {
+    width: 370px; /* Default size of the image */
+    height: 370px; /* Make the height and width the same for circular shape */
+    border-radius: 50%; /* Makes the image circular */
+    border: 3px solid #ff5733; /* Default border color */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    position: relative;
+    top: -130px; /* Adjust this value to move the image upwards */
+    transition: all 0.4s ease; /* Smooth transition for border changes */
+}
+
+/* Hover effect for animated border */
+.profile-image:hover {
+    border-color: #4CAF50; /* Change border color when hovered */
+    border-width: 3px; /* Increase border width on hover */
+    transform: scale(1.1); /* Slightly scale the image when hovered */
+}
+
+/* Media query for screens smaller than 600px */
+@media (max-width: 600px) {
+    .profile-image {
+        width: 260px; /* Reduce the size for smaller screens */
+        height: 260px; /* Make the height and width the same for circular shape */
+        top: -90px; /* Adjust the image slightly upwards */
+    }
+}
+
+/* Media query for screens smaller than 400px */
+@media (max-width: 400px) {
+    .profile-image {
+        width: 200px; /* Further reduce the size for very small screens */
+        height: 200px; /* Make the height and width the same for circular shape */
+        top: -90px; /* Center the image if necessary */
+    }
 }
