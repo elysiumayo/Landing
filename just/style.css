@@ -1,23 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;700&display=swap');
+
 body {
     margin: 0;
     padding: 0;
     height: 100vh;
     width: 100vw;
     overflow: hidden;
-    background-color:#181923  ;
+    background-color: #181923;
 }
 
 .transparent-box {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    border: 2px solid #f69197 ;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border: 1px solid #f69197;
     box-sizing: border-box;
     background: transparent;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+}
+
+.transparent-box::-webkit-scrollbar {
+    display: none;
+}
+
+.transparent-box {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .section {
@@ -29,19 +41,17 @@ body {
     scroll-snap-align: start;
     font-size: 2rem;
     background-color: transparent;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: 
+        opacity 0.8s ease-out, 
+        transform 0.8s ease-out;
 }
 
-/* Optional: Hide scrollbar while keeping functionality */
-.transparent-box::-webkit-scrollbar {
-    display: none;
+.section.active {
+    opacity: 1;
+    transform: scale(1);
 }
-
-.transparent-box {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
 
 #section1 {
     display: flex;
@@ -58,6 +68,16 @@ body {
     justify-content: center;
     margin-bottom: 20px;
     width: 100%;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: 
+        opacity 1s ease-out, 
+        transform 1s ease-out;
+}
+
+.profile-container.active {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .profile-image-wrapper {
@@ -67,7 +87,14 @@ body {
     overflow: hidden;
     border: 4px solid #ffffff;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+    transition: 
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.profile-image-wrapper:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.2);
 }
 
 .profile-image {
@@ -75,33 +102,71 @@ body {
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transition: transform 0.3s ease;
 }
 
-.profile-image-wrapper:hover {
-    transform: scale(1.05);
+.profile-image:hover {
+    transform: scale(1.1);
 }
 
 .tagline-container {
     text-align: center;
     width: 100%;
     padding: 0 20px;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: 
+        opacity 1s ease-out, 
+        transform 1s ease-out;
+}
+
+.tagline-container.active {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .tagline {
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Chakra Petch', sans-serif;
     font-size: 2vw;
-    color:#ffc4b8  ;
+    color: #ffc4b8;
     position: relative;
     white-space: nowrap;
     overflow: hidden;
     width: 0;
     margin: 0 auto;
     max-width: 100%;
-    animation: typing 3s steps(40, end) forwards,
-               blink-caret 0.75s step-end infinite;
+    font-weight: 700;
+    animation: 
+        typing 3s steps(40, end) forwards,
+        blink-caret 0.75s step-end infinite;
 }
 
-/* Responsive Adjustments */
+@keyframes typing {
+    from { 
+        width: 0;
+        max-width: 0;
+    }
+    to { 
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: rgba(255,196,184,0.7) }
+}
+
+.tagline::after {
+    content: '|';
+    animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
 @media screen and (max-width: 1200px) {
     .profile-image-wrapper {
         width: 300px;
@@ -109,7 +174,7 @@ body {
     }
 
     .tagline {
-        font-size: 5vw;
+        font-size: 3vw;
     }
 }
 
@@ -131,37 +196,7 @@ body {
     }
 
     .tagline {
-        font-size: 5vw;
+        font-size: 6vw;
         line-height: 1.2;
     }
 }
-
-/* Typing and Blinking Animations (Previous CSS remains the same) */
-@keyframes typing {
-    from { 
-        width: 0;
-        max-width: 0;
-    }
-    to { 
-        width: 100%;
-        max-width: 100%;
-    }
-}
-
-@keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: rgba(0,0,0,0.7) }
-}
-
-.tagline::after {
-    content: '|';
-    animation: blink 0.7s infinite;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-/* animation*/
-
