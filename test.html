@@ -1,226 +1,272 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon Cards with Enhanced Styling</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: auto; /* Allow scrolling */
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0; /* Light background for contrast */
-        }
+:root {
+    /* Color Variables */
+    --bg-dark: black;
+    --accent-color: #fafbf6;
+    --text-white: #ffffff;
+    --text-gray: #888888;
 
-        .section {
-            height: 100vh; /* Full viewport height */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            color: black; /* Text color */
-            font-size: 2em;
-        }
+    /* Animation Variables */
+    --transition-speed: 1.5s;
+    --ease-transition: ease-in-out;
+}
 
-        canvas {
-            position: fixed; /* Fixed position to cover the entire viewport */
-            top: 0;
-            left: 0;
-            pointer-events: none; /* Allow clicks to pass through the canvas */
-            z-index: -1; /* Place canvas behind other elements */
-        }
+/* Reset and Base Styles */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        /* Card styles */
-        .card-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px; /* Space between cards */
-            max-width: 800px; /* Max width for the card container */
-            width: 100%; /* Full width */
-        }
+body,
+html {
+    height: 100%;
+    font-family: "Orbitron", sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    overflow: hidden;
+    overscroll-behavior: none;
+    line-height: 1.6;
+}
 
-        .card {
-            background: linear-gradient(135deg, #ffffff, #e0e0e0); /* Gradient background */
-            border: 2px solid #000; /* Black border */
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 10px;
-            width: 200px; /* Fixed width for cards */
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s; /* Animation for hover effect */
-            position: relative;
-            overflow: hidden; /* Hide overflow for rounded corners */
-        }
+/* Splash Screen Styles */
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity var(--transition-speed) var(--ease-transition);
+}
 
-        .card:hover {
-            transform: scale(1.05); /* Scale up on hover */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
-        }
+.name {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
 
-        .card img {
-            width: 100%; /* Make image responsive */
-            height: auto; /* Maintain aspect ratio */
-            border-radius: 5px; /* Rounded corners for images */
-            margin-bottom: 10px; /* Space below image */
-        }
+.elysium {
+    color: var(--text-white);
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-weight: 700;
+}
 
-        .card-name {
-            font-weight: bold;
-            font-size: 1.2em; /* Larger font size for name */
-            margin-top: 5px; /* Space between image and name */
-        }
+.ayo {
+    color: var(--text-gray);
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    margin-left: 0.625rem;
+}
 
-        .card-type {
-            font-size: 0.9em;
-            color: #555; /* Darker gray for type */
-            margin: 5px 0; /* Space around type */
-        }
+.loading-bar {
+    width: 0;
+    height: 0.1rem;
+    background-color: var(--text-white);
+    transition: width 2s var(--ease-transition);
+}
 
-        .card-stats {
-            font-size: 0.8em;
-            margin-top: 10px; /* Space above stats */
-            color: #333; /* Darker color for stats */
-        }
+.splash-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
 
-        /* Additional styling for card effects */
-        .card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2); /* Subtle overlay */
-            z-index: 0; /* Behind the content */
-            transition: opacity 0.3s; /* Smooth transition */
-        }
+/* Main Content Styles */
+#main-content {
+    opacity: 0;
+    transition: opacity var(--transition-speed) var(--ease-transition);
+}
 
-        .card:hover:before {
-            opacity: 0; /* Hide overlay on hover */
-        }
+#main-content.visible {
+    opacity: 1;
+}
 
-        .card-content {
-            position: relative; /* Positioning for content */
-            z-index: 1; /* Above the overlay */
-        }
-    </style>
-</head>
-<body>
-    <canvas id="graphCanvas"></canvas>
-    <div id="section1" class="section">
-        <div class="card-container">
-            <div class="card">
-                <div class="card-content">
-                    <img src="https://img.pokemondb.net/artwork/large/pikachu.jpg" alt="Pikachu">
-                    <div class="card-name">Pikachu</div>
-                    <div class="card-type">Electric</div>
-                    <div class="card-stats">HP: 35</div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <img src="https://img.pokemondb.net/artwork/large/charizard.jpg" alt="Charizard">
-                    <div class="card-name">Charizard</div>
-                    <div class="card-type">Fire/Flying</div>
-                    <div class="card-stats">HP: 78</div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <img src="https://img.pokemondb.net/artwork/large/bulbasaur.jpg" alt="Bulbasaur">
-                    <div class="card-name">Bulbasaur</div>
-                    <div class="card-type">Grass/Poison</div>
-                    <div class="card-stats">HP: 45</div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <img src="https://img.pokemondb.net/artwork/large/squirtle.jpg" alt="Squirtle">
-                    <div class="card-name">Squirtle</div>
-                    <div class="card-type">Water</div>
-                    <div class="card-stats">HP: 44</div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <img src="https://img.pokemondb.net/artwork/large/jigglypuff.jpg" alt="Jigglypuff">
-                    <div class="card-name">Jigglypuff</div>
-                    <div class="card-type">Normal/Fairy</div>
-                    <div class="card-stats">HP: 115</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="section2" class="section">Section 2</div>
-    <div id="section3" class="section">Section 3</div>
-    <div id="section4" class="section">Section 4</div>
-    <div id="section5" class="section">Section 5</div>
-    <div id="section6" class="section">Section 6</div>
+.frame {
+    position: absolute;
+    top: 1.1rem;
+    left: 1.1rem;
+    right: 1.1rem;
+    bottom: 1.1rem;
+    background-color: var(--bg-dark);
+    border: 0.1px solid var(--accent-color);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    overflow: hidden;
+    box-sizing: content-box;
+}
 
-    <script>
-        const canvas = document.getElementById('graphCanvas');
-        const context = canvas.getContext('2d');
+/* Dot Grid Canvas */
+#dot-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 2s var(--ease-transition);
+}
 
-        // Function to set canvas size
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            drawGrid(); // Redraw the grid when resizing
-        }
+#dot-grid.visible {
+    opacity: 1;
+}
 
-        // Function to render the grid
-        function drawGrid() {
-            // Clear the canvas
-            context.clearRect(0, 0, canvas.width, canvas.height);
+/* Profile Image Container */
+.profile-image-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    align-items: center;
+    transform: translateY(-1%);
+}
 
-            // Set grid parameters
-            const majorInterval = 50; // Major grid line interval
-            const minorInterval = 10;  // Minor grid line interval
-            const majorColor = 'darkblue'; // Darker color for major lines
-            const minorColor = 'rgba(200, 200, 200, 0.5)'; // Lighter color for minor lines
-            const majorLineWidth = 3; // Thicker major lines
-            const minorLineWidth = 1;  // Thinner minor lines
+.profile-image {
+    width: 30%;
+    max-width: 25.875rem;
+    height: auto;
+    border-radius: 50%;
+    border: 0.0625rem solid var(--accent-color);
+    object-fit: cover;
+}
 
-            // Draw minor grid lines (dashed)
-            context.lineWidth = minorLineWidth;
-            context.strokeStyle = minorColor;
-            context.setLineDash([5, 5]); // Set dashed line style
-            for (let x = 0; x <= canvas.width; x += minorInterval) {
-                context.beginPath();
-                context.moveTo(x, 0);
-                context.lineTo(x, canvas.height);
-                context.stroke();
-            }
-            for (let y = 0; y <= canvas.height; y += minorInterval) {
-                context.beginPath();
-                context.moveTo(0, y);
-                context.lineTo(canvas.width, y);
-                context.stroke();
-            }
-            context.setLineDash([]); // Reset to solid lines for major grid
+.tagline {
+    margin-top: 1.25rem;
+    font-size: clamp(2.1rem, 3.5vw, 3.5rem);
+    color: var(--accent-color);
+    text-align: center;
+    font-weight: 300;
+}
 
-            // Draw major grid lines
-            context.lineWidth = majorLineWidth;
-            context.strokeStyle = majorColor;
-            for (let x = 0; x <= canvas.width; x += majorInterval) {
-                context.beginPath();
-                context.moveTo(x, 0);
-                context.lineTo(x, canvas.height);
-                context.stroke();
-            }
-            for (let y = 0; y <= canvas.height; y += majorInterval) {
-                context.beginPath();
-                context.moveTo(0, y);
-                context.lineTo(canvas.width, y);
-                context.stroke();
-            }
-        }
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .profile-image {
+        width: 70%;
+    }
 
-        // // Initial setup
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas); // Handle window resizing
-    </script>
-</body>
-</html>
+    .profile-image-container {
+        transform: translateY(-8%);
+    }
+
+    .tagline {
+        margin-top: 4rem;
+        font-size: 2rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .profile-image {
+        width: 50%;
+    }
+
+    .profile-image-container {
+        transform: translateY(-5%);
+    }
+
+    .tagline {
+        margin-top: 0.625rem;
+    }
+}
+
+/* Performance Optimization Hints */
+.profile-image {
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+
+    .splash-screen,
+    #dot-grid {
+        display: none;
+    }
+}
+
+/* GitHub link specific styling */
+.github-link {
+    position: fixed;
+    bottom: 3rem;
+    left: 2rem;
+    color: var(--text-white);
+    font-size: 0.9rem;
+    text-decoration: none;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    transform: rotate(270deg); /* Rotate by 270 degrees */
+    transform-origin: bottom left; /* Rotate around bottom left */
+    transition: color 0.3s ease-in-out;
+    z-index: 9999;
+    background-color: var(--bg-dark);
+    letter-spacing: 2px;
+}
+
+.github-link i {
+    margin-right: 0.5rem; /* Space between icon and text */
+    font-size: 1.2rem; /* Adjust icon size */
+}
+
+.github-link:hover {
+    color: #4c5dff;
+}
+
+/* Email link specific styling */
+.email-link {
+    position: fixed;
+    bottom: 11rem;
+    left: 2rem; /* Adjust the distance to avoid overlap with GitHub link */
+    color: var(--text-white);
+    font-size: 0.9rem;
+    text-decoration: none;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    transform: rotate(270deg); /* Rotate by 270 degrees */
+    transform-origin: bottom left; /* Rotate around bottom left */
+    transition: color 0.3s ease-in-out;
+    z-index: 9999;
+    background-color: var(--bg-dark);
+    letter-spacing: 2px;
+}
+
+.email-link i {
+    margin-right: 0.5rem; /* Space between icon and text */
+    font-size: 1.2rem; /* Adjust icon size */
+}
+
+.email-link:hover {
+    color: #ff4081;
+}
+
+/* System link specific styling */
+.system {
+    position: fixed;
+    top: 0.4rem;
+    left: 2rem;
+    color: var(--text-white);
+    font-size: 0.9rem;
+    text-decoration: none;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease-in-out;
+    z-index: 9999;
+    background-color: var(--bg-dark);
+    letter-spacing: 2px;
+}
+
+.system i {
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
