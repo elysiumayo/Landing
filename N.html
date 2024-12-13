@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elysium Ayo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            overflow-x: hidden;
+            background: #121212;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transform: translateX(0);
+            transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .splash-screen.slide-out {
+            transform: translateX(-100%);
+        }
+
+        .name-container {
+            display: flex;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .name-ayo {
+            color: #888;
+            margin-left: 0.5rem;
+        }
+
+        .loading-bar-container {
+            margin-top: 1rem;
+            width: 100px;
+            height: 4px;
+            background: #444;
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+        }
+
+        .loading-bar {
+            height: 100%;
+            background-color: #888;
+            animation: loading 3s linear forwards;
+        }
+
+        @keyframes loading {
+            0% {
+                width: 0;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+
+        /* Main Page */
+        .main-page {
+            height: 100%;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .frame-container {
+            width: calc(100% - 20px); /* Subtract 10px margins */
+            height: calc(100% - 20px);
+            background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
+            border: 2px solid #888;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            overflow: auto;
+        }
+
+        .frame-content {
+            padding: 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .frame-content h1 {
+            margin-bottom: 1rem;
+        }
+
+        .frame-content p {
+            line-height: 1.5;
+            font-size: 1rem;
+        }
+
+        /* Scrollbar Styling */
+        .frame-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .frame-container::-webkit-scrollbar-thumb {
+            background: #666;
+            border-radius: 4px;
+        }
+
+        .frame-container::-webkit-scrollbar-track {
+            background: #222;
+        }
+
+        @media (max-width: 768px) {
+            .frame-content p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="name-container">
+            Elysium <span class="name-ayo">Ayo</span>
+        </div>
+        <div class="loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
+    </div>
+
+    <!-- Main Page -->
+    <div class="main-page" id="mainPage" style="display: none;">
+        <div class="frame-container">
+            <div class="frame-content">
+                <h1>Welcome to Elysium Ayo</h1>
+                <p>
+                    This is the main page content. The entire webpage is framed with a consistent 10px margin 
+                    from the edges of the screen. You can add more content here or scroll if the content overflows.
+                </p>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vitae convallis lorem. 
+                    Nullam eget orci a nunc tincidunt dictum non a sapien. Nam sed felis in eros vestibulum mattis.
+                </p>
+                <p>
+                    Sed fringilla ligula nec augue sodales malesuada. Proin malesuada consequat ex, et gravida nisl dapibus sed. 
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const splashScreen = document.getElementById('splashScreen');
+            const mainPage = document.getElementById('mainPage');
+
+            // Hide splash screen after 3 seconds
+            setTimeout(() => {
+                splashScreen.classList.add('slide-out');
+
+                // Show main page after transition
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                    mainPage.style.display = 'flex';
+                }, 1000); // Matches the transition duration
+            }, 3000); // Splash screen duration
+        });
+        function isScrollable(frame) {
+    return frame.scrollHeight > frame.clientHeight;
+}
+
+const frameContainer = document.querySelector('.frame-container');
+
+if (isScrollable(frameContainer)) {
+    console.log("The frame is scrollable.");
+} else {
+    console.log("The frame is not scrollable.");
+}
+    </script>
+</body>
+</html>
