@@ -21,6 +21,7 @@ html {
     background: transparent;
     overflow: hidden;
     display: flex;
+    padding:7px;
     flex-direction: column;
 }
 /* Splash Screen */
@@ -119,7 +120,7 @@ html {
 .links-container {
     position: absolute;
     bottom: 1rem;
-    left: 0.5rem;
+    left: 0.4rem;
     display: flex;
     gap: 2rem;
     transform: rotate(270deg); /* Rotate the text 270 degrees */
@@ -130,9 +131,10 @@ html {
 /* Individual Link Styling */
 #githubLink,
 #emailLink {
-    color: #dd7878;
+    color: white;
     text-decoration: none;
     font-size: 1rem;
+    background-color:black;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -152,30 +154,32 @@ html {
     color: white;
 }
 #system {
-    color: #dd7878;
+    color: white;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     transition: color 0.3s ease;
     letter-spacing: 2px;
+    background-color:black;
     position: absolute;
-    top: 0.5rem;
+    top: 0.4rem;
     left: 1.5rem;
 }
 #quotes {
-    color: #dd7878;
+    color: white;
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     transition: color 0.3s ease;
     letter-spacing: 2px;
     position: absolute;
-    top: 28rem;
-    right: 0.5rem;
+    background-color:black;
+    top: 25rem;
+    right: 0.4rem;
     transform: rotate(90deg); /* Rotate the text 270 degrees */
     transform-origin: top right; /* Rotate around the top-right corner */
 }
