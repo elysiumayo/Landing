@@ -1,192 +1,277 @@
-:root {
-    /* Color Variables */
-    --bg-dark: #090a14;
-    --accent-color: #c0caf5;
-    --text-white: #ffffff;
-    --text-gray: #888888;
-
-    /* Animation Variables */
-    --transition-speed: 1.5s;
-    --ease-transition: ease-in-out;
-}
-
-/* Reset and Base Styles */
-*,
-*::before,
-*::after {
+/* General Reset */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Body & HTML */
 body,
 html {
     height: 100%;
+    overflow-x: hidden;
     font-family: "Orbitron", sans-serif;
-    background-color: var(--bg-dark);
-    color: var(--text-white);
-    overflow: hidden;
-    overscroll-behavior: none;
-    line-height: 1.6;
+    background-color: black;
 }
 
-/* Splash Screen Styles */
+/* Page Frame */
+.page-frame {
+    position: fixed;
+    top: 0.6rem;
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    border: 0.4px solid #888;
+    background: transparent;
+    overflow: hidden;
+    display: flex;
+      padding:0.7rem;
+    flex-direction: column;
+}
+
+/* Main Content Area */
+.main-content {
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+/* Scrollable Area */
+.scrollable-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+/* Full-Screen Section */
+.scrollable-content section {
+    height: 100vh; /* Ensure each scrollable section takes full viewport height */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: transparent; /* Fully transparent to show shaders */
+}
+
+/* Splash Screen */
 .splash-screen {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: black;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    transition: opacity var(--transition-speed) var(--ease-transition);
+    z-index: 9999;
+    transform: translateX(0);
+    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.name {
+.splash-screen.slide-out {
+    transform: translateX(-100%);
+}
+
+.name-container {
     display: flex;
-    align-items: center;
-    margin-bottom: 1.25rem;
+    font-size: clamp(1.5rem, 5vw, 3rem);
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    animation-delay: 0.5s;
 }
 
-.elysium {
-    color: var(--text-white);
-    font-size: clamp(2.5rem, 4vw, 4rem);
-    font-weight: 700;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
-.ayo {
-    color: var(--text-gray);
-    font-size: clamp(2.5rem, 4vw, 4rem);
-    margin-left: 0.625rem;
+.name-elysium {
+    color: white;
+    margin-right: 0.5rem;
+}
+
+.name-ayo {
+    color: #888;
+}
+
+/* Loading Bar */
+.loading-bar-container {
+    margin-top: 1rem;
+    height: 2px;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    animation-delay: 1s;
 }
 
 .loading-bar {
-    width: 0;
-    height: 0.1rem;
-    background-color: var(--text-white);
-    transition: width 2s var(--ease-transition);
-}
-
-.splash-screen.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* Main Content Styles */
-#main-content {
-    opacity: 0;
-    transition: opacity var(--transition-speed) var(--ease-transition);
-}
-
-#main-content.visible {
-    opacity: 1;
-}
-
-.frame {
-    position: absolute;
-    top: 1.25rem;
-    left: 1.25rem;
-    right: 1.25rem;
-    bottom: 1.25rem;
-    background-color: var(--bg-dark);
-    border: 0.5px solid var(--accent-color);
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    overflow: hidden;
-}
-
-/* Dot Grid Canvas */
-#dot-grid {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
     height: 100%;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 2s var(--ease-transition);
+    background-color: #888;
+    animation: loadingAnimation 3s linear forwards;
 }
 
-#dot-grid.visible {
-    opacity: 1;
+@keyframes loadingAnimation {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
 }
 
-/* Profile Image Container */
-.profile-image-container {
+/* Links Container */
+.links-container {
+    position: absolute;
+    bottom: 1rem;
+    left: 0.2rem;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    gap: 2rem;
+    transform: rotate(270deg);
+    transform-origin: left top;
+    z-index: 10;
+}
+
+/* Individual Link Styling */
+#githubLink,
+#emailLink {
+    color: white;
+    text-decoration: none;
+    font-size: 0.87rem;
+    background-color: black;
+    display: flex;
     align-items: center;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform: translateY(-10%);
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+    letter-spacing: 2px;
 }
 
-.profile-image {
-    width: 30%;
-    max-width: 21.875rem;
-    height: auto;
-    border-radius: 50%;
-    border: 0.0625rem solid var(--accent-color);
-    object-fit: cover;
+/* Icon Styling */
+#githubLink i,
+#emailLink i {
+    font-size: 1.2rem;
+}
+
+/* System & Quotes Styling */
+#system {
+    color: white;
+    text-decoration: none;
+    font-size: 0.87rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+    letter-spacing: 2px;
+    background-color: black;
+    position: absolute;
+    top: 0.1rem;
+    left: 1.5rem;
+}
+
+#quotes {
+    color: white;
+    text-decoration: none;
+    font-size: 0.87rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+    letter-spacing: 2px;
+    position: absolute;
+    background-color: black;
+    top: 27rem;
+    right: 0.12rem;
+    transform: rotate(90deg);
+    transform-origin: top right;
+}
+/* Hide Scrollbars for Webkit Browsers (Chrome, Safari, Edge) */
+.scrollable-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide Scrollbars for Firefox */
+.scrollable-content {
+    scrollbar-width: none; /* For Firefox */
+}
+
+/* Tagline Section */
+.tagline-section {
+  background: transparent; /* Keep transparent for shader effect */
+  padding: 3rem 2rem; /* Adjust padding */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align everything left horizontally */
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Tagline Styling */
+.tagline-container {
+  width: 100%; /* Full available width */
+  text-align: left; /* Left-align content */
 }
 
 .tagline {
-    margin-top: 6.25rem;
-    font-size: clamp(1.1rem, 2.5vw, 2.5rem);
-    color: var(--accent-color);
-    text-align: center;
-    font-weight: 300;
+  font-size: clamp(1.2rem, 5vw, 3rem); 
+  margin-bottom: 0.5rem;
+  line-height: 1.2; /* Adjust line height for better readability */
+  width: 48%;
 }
 
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-    .profile-image {
-        width: 60%;
-    }
 
-    .profile-image-container {
-        transform: translateY(-8%);
-    }
-
-    .tagline {
-        margin-top: 3.125rem;
-    }
+/* Description Styling */
+.description {
+ font-size: clamp(1rem, 4vw, 1rem); 
+  color: #ccc;
+  line-height: 2;
+  word-wrap: break-word; /* Ensure text breaks cleanly in narrow screens */
+  margin-top: 1.5rem;
+  width: 38%;
 }
 
-@media screen and (max-width: 480px) {
-    .profile-image {
-        width: 50%;
-    }
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .tagline {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+	    width:95%;
+  }
 
-    .profile-image-container {
-        transform: translateY(-5%);
-    }
+  .description {
+font-size: clamp(0.9rem, 3vw, 1.2rem);
+width: 95%;
+line-height:1.2;
+  }
 
-    .tagline {
-        margin-top: 0.625rem;
-    }
+  .tagline-section {
+    padding: 1.5rem 0.5rem;
+  }
 }
 
-/* Performance Optimization Hints */
-.profile-image {
-    will-change: transform;
-    backface-visibility: hidden;
+@media (max-width: 480px) {
+  .tagline {
+    font-size: clamp(1.3rem, 7vw, 2rem);
+  }
+
+  .description {
+    font-size: clamp(0.8rem, 6vw, 1.2rem);
+  }
+
+  .tagline-section {
+    padding: 1rem 0.3rem;
+  }
 }
 
-/* Print Styles */
-@media print {
-    body {
-        background: white;
-        color: black;
-    }
 
-    .splash-screen,
-    #dot-grid {
-        display: none;
-    }
-}
