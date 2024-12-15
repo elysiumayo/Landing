@@ -1,128 +1,182 @@
-window.onload = () => {
-  const splashScreen = document.getElementById("splash-screen");
-  const loadingBar = document.getElementById("loading-bar");
-  const mainContent = document.getElementById("main-content");
-  const nameContainer = document.getElementById("name-container");
+document.addEventListener("DOMContentLoaded", () => {
+  const splashScreen = document.getElementById("splashScreen");
+  const nameContainer = document.getElementById("nameContainer");
+  const loadingBarContainer = document.getElementById("loadingBarContainer");
+  const loadingBar = document.getElementById("loadingBar");
+  const pageFrame = document.getElementById("pageFrame");
+  const mainContent = document.getElementById("mainContent");
 
-  // Function to set loading bar width
-  const setLoadingBarWidth = () => {
-    // Ensure the font is loaded and name is fully rendered
+  // Set loading bar width to match name container
+  function setLoadingBarWidth() {
     const nameWidth = nameContainer.offsetWidth;
-    loadingBar.style.width = `${nameWidth}px`;
-
-    // Transition sequence
-    setTimeout(() => {
-      loadingBar.style.width = `${nameWidth}px`;
-
-      setTimeout(() => {
-        splashScreen.classList.add("hidden");
-        mainContent.classList.add("visible");
-      }, 2000);
-    }, 500);
-  };
-
-  // Ensure that fonts are fully loaded before executing the transition logic
-  if (document.fonts) {
-    document.fonts.ready.then(() => {
-      // Wait a brief moment for layout to stabilize
-      setTimeout(setLoadingBarWidth, 100);
-    });
-  } else {
-    // Fallback for browsers without Font Loading API
-    setTimeout(setLoadingBarWidth, 100);
+    loadingBarContainer.style.width = `${nameWidth}px`;
   }
-};
 
-// Dot Grid Animation
-const canvas = document.getElementById("dot-grid");
-const ctx = canvas.getContext("2d");
+  // Call on initial load and after a short delay to ensure accurate measurement
+  setLoadingBarWidth();
+  setTimeout(setLoadingBarWidth, 100);
 
-// Animation parameters
-let animationTime = 0;
-const dotColor = "#ebede94"; // Slightly lighter dark gray dots
-const dotSize = 2; // Smaller dot diameter
-const gridSpacing = 17; // Closer dot spacing
-const waveAmplitude = 100; // Dramatically increased wave movement
-const waveFrequency = 0.02; // Adjusted wave frequency
-const waveSpeed = 1; // Wave propagation speed
+  // Resize listener
+  window.addEventListener("resize", setLoadingBarWidth);
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
+  // Shader Background Class
+  class ShaderBackground {
+    constructor(containerElement) {
+      this.container = containerElement;
+      this.scene = new THREE.Scene();
+      this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      this.renderer = new THREE.WebGLRenderer();
 
-function drawDotGrid() {
-  // Clear previous drawing
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+      this.setupRenderer();
+      this.createShaderMaterial();
+      this.addPlane();
+      this.startAnimation();
+    }
 
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
-  const gradientHeight = canvas.height * 0.2; // 20% gradient at top and bottom
-  const maxOpacity = 10; // Max opacity for center
-  const minOpacity = 1; // Minimum opacity at edges
-
-  // Create a radial gradient
-  const gradient = ctx.createRadialGradient(
-    centerX,
-    centerY,
-    0,
-    centerX,
-    centerY,
-    Math.max(canvas.width, canvas.height),
-  );
-  gradient.addColorStop(0, `rgba(51, 51, 51, ${maxOpacity})`);
-  gradient.addColorStop(1, `rgba(51, 51, 51, ${minOpacity})`);
-
-  // Draw dots across the entire canvas
-  for (let x = 0; x < canvas.width; x += gridSpacing) {
-    for (let y = 0; y < canvas.height; y += gridSpacing) {
-      // Calculate distance from center
-      const distanceFromCenter = Math.sqrt(
-        Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2),
+    setupRenderer() {
+      this.renderer.setSize(
+        this.container.clientWidth,
+        this.container.clientHeight,
       );
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      this.container.appendChild(this.renderer.domElement);
+      this.renderer.domElement.style.position = "absolute";
+      this.renderer.domElement.style.top = "0";
+      this.renderer.domElement.style.left = "0";
+      this.renderer.domElement.style.zIndex = "-1";
+    }
 
-      // More complex wave calculation for clearer ripples
-      const waveOffset =
-        Math.sin(
-          distanceFromCenter * waveFrequency - animationTime * waveSpeed,
-        ) *
-        (waveAmplitude / (1 + distanceFromCenter * 0.05));
+    createShaderMaterial() {
+      this.uniforms = {
+        iTime: { value: 0 },
+        iResolution: {
+          value: new THREE.Vector2(window.innerWidth, window.innerHeight),
+        },
+      };
 
-      // Calculate opacity based on distance from center
-      let opacity =
-        1 - distanceFromCenter / (Math.max(canvas.width, canvas.height) / 2);
-      opacity = Math.max(minOpacity, opacity); // Prevent opacity from going below a certain level
+      this.material = new THREE.ShaderMaterial({
+        uniforms: this.uniforms,
+        vertexShader: `
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform float iTime;
+          uniform vec2 iResolution;
+          varying vec2 vUv;
 
-      // Calculate gradient opacity based on Y position (top-bottom gradient)
-      if (y < gradientHeight) {
-        opacity *= y / gradientHeight; // Top gradient
-      } else if (y > canvas.height - gradientHeight) {
-        opacity *= (canvas.height - y) / gradientHeight; // Bottom gradient
-      }
+          void main() {
+            vec2 uv = (2.0 * gl_FragCoord.xy - iResolution.xy) / min(iResolution.x, iResolution.y);
+            for(float i = 1.0; i < 10.0; i++){
+              uv.x += 0.6 / i * cos(i * 2.5 * uv.y + iTime);
+              uv.y += 0.6 / i * cos(i * 1.5 * uv.x + iTime);
+            }
 
-      // Draw dot with wave effect and calculated opacity
-      ctx.beginPath();
-      ctx.arc(x, y + waveOffset, dotSize / 2, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(51, 51, 51, ${opacity})`;
-      ctx.fill();
+            gl_FragColor = vec4(vec3(0.05)/abs(sin(iTime-uv.y-uv.x)), 1.0);
+          }
+        `,
+      });
+    }
+
+    addPlane() {
+      const geometry = new THREE.PlaneGeometry(2, 2);
+      const mesh = new THREE.Mesh(geometry, this.material);
+      this.scene.add(mesh);
+    }
+
+    startAnimation() {
+      const animate = () => {
+        requestAnimationFrame(animate);
+
+        // Update time uniform
+        this.uniforms.iTime.value = performance.now() * 0.001;
+
+        // Update resolution if window is resized
+        this.uniforms.iResolution.value.set(
+          this.container.clientWidth,
+          this.container.clientHeight,
+        );
+
+        this.renderer.render(this.scene, this.camera);
+      };
+      animate();
+
+      // Handle window resize
+      window.addEventListener("resize", () => {
+        this.renderer.setSize(
+          this.container.clientWidth,
+          this.container.clientHeight,
+        );
+      });
     }
   }
 
-  // Increment animation time
-  animationTime += 0.05;
+  // Initialize shader background
+  const shaderBackground = new ShaderBackground(mainContent);
 
-  // Request next animation frame
-  requestAnimationFrame(drawDotGrid);
-}
+  // Hide splash screen after 3 seconds with slide transition
+  setTimeout(() => {
+    splashScreen.classList.add("slide-out");
+    // Completely remove splash screen after transition
+    setTimeout(() => {
+      splashScreen.style.display = "none";
+    }, 1000);
+  }, 3000);
+});
+document.addEventListener("DOMContentLoaded", () => {
+    const contentScrollContainer = document.querySelector('.content-scroll-container');
+    
+    // Smooth scroll control
+    function smoothScroll() {
+        contentScrollContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            // Adjust scroll speed and smoothness
+            contentScrollContainer.scrollTop += e.deltaY * 0.5;
+        }, { passive: false });
+    }
 
-// Initial setup
-resizeCanvas();
-drawDotGrid();
+    // Parallax effect for sections
+    function parallaxEffect() {
+        contentScrollContainer.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach((section, index) => {
+                const scrollPosition = contentScrollContainer.scrollTop;
+                const sectionTop = section.offsetTop;
+                const parallaxFactor = index * 50; // Adjust for desired effect
+                
+                section.style.transform = `translateY(${
+                    (scrollPosition - sectionTop) * 0.3 + parallaxFactor
+                }px)`;
+            });
+        });
+    }
 
-// Redraw grid on window resize
-window.addEventListener("resize", resizeCanvas);
+    // Initialize scroll and parallax features
+    smoothScroll();
+    parallaxEffect();
+});
+document.addEventListener("DOMContentLoaded", function () {
+  const aboutMeSection = document.querySelector(".about-me-section");
 
-// Delay showing the dot grid after the main content is visible
-setTimeout(() => {
-  canvas.classList.add("visible"); // Show the dot grid after delay
-}, 1000); // Delay in milliseconds (1 second after the splash screen transition)
+  // IntersectionObserver to detect when the section scrolls into view
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          aboutMeSection.classList.add("visible");
+        } else {
+          aboutMeSection.classList.remove("visible");
+        }
+      });
+    },
+    {
+      threshold: 0.5, // Trigger when 50% of the section is visible
+    }
+  );
+
+  observer.observe(aboutMeSection);
+});
+
