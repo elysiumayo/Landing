@@ -1,0 +1,274 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body & HTML */
+body,
+html {
+    height: 100%;
+    overflow-x: hidden;
+    font-family: "Orbitron", sans-serif;
+    background-color: black;
+}
+
+/* Page Frame */
+.page-frame {
+    position: fixed;
+    top: 0.6rem;
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    border: 0.4px solid #888;
+    background: transparent;
+    overflow: hidden;
+    display: flex;
+    padding: 0.7rem;
+    flex-direction: column;
+}
+
+/* Main Content Area */
+.main-content {
+    position: relative;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+/* Scrollable Area */
+.scrollable-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+/* Full-Screen Section */
+.scrollable-content section {
+    height: 100vh; /* Ensure each scrollable section takes full viewport height */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: transparent; /* Fully transparent to show shaders */
+}
+
+/* Splash Screen */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transform: translateX(0);
+    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.splash-screen.slide-out {
+    transform: translateX(-100%);
+}
+
+.name-container {
+    display: flex;
+    font-size: clamp(1.5rem, 5vw, 3rem);
+    white-space: nowrap;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.name-elysium {
+    color: white;
+    margin-right: 0.5rem;
+}
+
+.name-ayo {
+    color: #888;
+}
+
+/* Loading Bar */
+.loading-bar-container {
+    margin-top: 1rem;
+    height: 2px;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+    animation-delay: 1s;
+}
+
+.loading-bar {
+    height: 100%;
+    background-color: #888;
+    animation: loadingAnimation 3s linear forwards;
+}
+
+@keyframes loadingAnimation {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+/* Links Container */
+.links-container {
+    position: absolute;
+    bottom: 1rem;
+    left: 0.2rem;
+    display: flex;
+    gap: 2rem;
+    transform: rotate(270deg);
+    transform-origin: left top;
+    z-index: 10;
+}
+
+/* Individual Link Styling */
+#githubLink,
+#emailLink {
+    color: white;
+    text-decoration: none;
+    font-size: 0.87rem;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+    letter-spacing: 2px;
+}
+
+/* Icon Styling */
+#githubLink i,
+#emailLink i {
+    font-size: 1.2rem;
+}
+
+/* System & Quotes Styling */
+#system {
+    color: white;
+    text-decoration: none;
+    font-size: 0.87rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+    letter-spacing: 2px;
+    background-color: black;
+    position: absolute;
+    top: 0.1rem;
+    left: 1.5rem;
+}
+
+#quotes {
+    color: white;
+    text-decoration: none;
+    font-size: 0.87rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease;
+    letter-spacing: 2px;
+    position: absolute;
+    background-color: black;
+    top: 27rem;
+    right: 0.12rem;
+    transform: rotate(90deg);
+    transform-origin: top right;
+}
+/* Hide Scrollbars for Webkit Browsers (Chrome, Safari, Edge) */
+.scrollable-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide Scrollbars for Firefox */
+.scrollable-content {
+    scrollbar-width: none; /* For Firefox */
+}
+
+/* Tagline Section */
+.tagline-section {
+    background: transparent; /* Keep transparent for shader effect */
+    padding: 3rem 2rem; /* Adjust padding */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align everything left horizontally */
+    max-width: 100%;
+    width: 100%;
+}
+
+/* Tagline Styling */
+.tagline-container {
+    width: 100%; /* Full available width */
+    text-align: left; /* Left-align content */
+}
+
+.tagline {
+    font-size: clamp(1.2rem, 5vw, 3rem);
+    margin-bottom: 0.5rem;
+    line-height: 1.2; /* Adjust line height for better readability */
+    width: 48%;
+}
+
+/* Description Styling */
+.description {
+    font-size: clamp(1rem, 4vw, 1rem);
+    color: #ccc;
+    line-height: 2;
+    word-wrap: break-word; /* Ensure text breaks cleanly in narrow screens */
+    margin-top: 1.5rem;
+    width: 38%;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+    .tagline {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        width: 95%;
+    }
+
+    .description {
+        font-size: clamp(0.9rem, 3vw, 1.2rem);
+        width: 95%;
+        line-height: 1.2;
+    }
+
+    .tagline-section {
+        padding: 1.5rem 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tagline {
+        font-size: clamp(1.3rem, 7vw, 2rem);
+    }
+
+    .description {
+        font-size: clamp(0.8rem, 6vw, 1.2rem);
+    }
+
+    .tagline-section {
+        padding: 1rem 0.3rem;
+    }
+}
