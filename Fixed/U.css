@@ -12,8 +12,7 @@ html {
     overflow-x: hidden;
     font-family: "Orbitron", sans-serif;
     background-color: black;
-    color: white;
-    transition: background-color 0.3s, color 0.3s;
+    user-select: none; /* Disables text selection */
 }
 
 /* Page Frame */
@@ -25,11 +24,9 @@ html {
     bottom: 0.6rem;
     border: 0.4px solid #888;
     background: transparent;
-    overflow: hidden;
     display: flex;
     padding: 0.7rem;
     flex-direction: column;
-    transition: border-color 0.3s;
 }
 
 /* Main Content Area */
@@ -51,23 +48,14 @@ html {
     height: 100%;
 }
 
-/* Full-Screen Section */
 .scrollable-content section {
-    height: 100vh;
+    height: 100vh; /* Full viewport height */
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: transparent;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s, transform 0.5s;
-}
-
-.scrollable-content section.visible {
-    opacity: 1;
-    transform: translateY(0);
+    background: transparent; /* Transparent to show shaders */
 }
 
 /* Splash Screen */
@@ -95,15 +83,8 @@ html {
     display: flex;
     font-size: clamp(1.5rem, 5vw, 3rem);
     white-space: nowrap;
-    overflow: hidden;
     opacity: 0;
-    animation: fadeIn 1s forwards;
-    animation-delay: 0.5s;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    animation: fadeIn 1s forwards 0.5s;
 }
 
 .name-elysium {
@@ -115,13 +96,21 @@ html {
     color: #888;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 /* Loading Bar */
 .loading-bar-container {
     margin-top: 1rem;
     height: 2px;
     opacity: 0;
-    animation: fadeIn 1s forwards;
-    animation-delay: 1s;
+    animation: fadeIn 1s forwards 1s;
 }
 
 .loading-bar {
@@ -131,8 +120,12 @@ html {
 }
 
 @keyframes loadingAnimation {
-    0% { width: 0; }
-    100% { width: 100%; }
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
 }
 
 /* Links Container */
@@ -161,37 +154,32 @@ html {
     letter-spacing: 2px;
 }
 
-/* Icon Styling */
 #githubLink i,
 #emailLink i {
     font-size: 1.2rem;
 }
 
-/* System & Quotes Styling */
+/* System Info */
 #system {
     color: white;
-    text-decoration: none;
     font-size: 0.87rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: color 0.3s ease;
     letter-spacing: 2px;
     background-color: black;
     position: absolute;
     top: 0.1rem;
     left: 1.5rem;
-    cursor: pointer;
 }
 
+/* Quote Section */
 #quotes {
     color: white;
-    text-decoration: none;
     font-size: 0.87rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: color 0.3s ease, opacity 0.5s ease;
     letter-spacing: 2px;
     position: absolute;
     background-color: black;
@@ -201,18 +189,12 @@ html {
     transform-origin: top right;
 }
 
-#quotes.fade-out {
-    opacity: 0;
-}
-
-/* Hide Scrollbars for Webkit Browsers (Chrome, Safari, Edge) */
+/* Hide Scrollbars */
 .scrollable-content::-webkit-scrollbar {
     display: none;
 }
-
-/* Hide Scrollbars for Firefox */
 .scrollable-content {
-    scrollbar-width: none;
+    scrollbar-width: none; /* Firefox */
 }
 
 /* Tagline Section */
@@ -223,11 +205,9 @@ html {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    max-width: 100%;
     width: 100%;
 }
 
-/* Tagline Styling */
 .tagline-container {
     width: 100%;
     text-align: left;
@@ -240,7 +220,6 @@ html {
     width: 48%;
 }
 
-/* Description Styling */
 .description {
     font-size: clamp(1rem, 4vw, 1rem);
     color: #ccc;
@@ -250,55 +229,7 @@ html {
     width: 38%;
 }
 
-/* System Menu Styles */
-.system-menu {
-    position: fixed;
-    top: 50px;
-    right: 20px;
-    background: rgba(0,0,0,0.9);
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #888;
-    z-index: 9999;
-}
-
-.system-menu button {
-    display: block;
-    width: 100%;
-    margin: 5px 0;
-    padding: 5px;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.system-menu button:hover {
-    background-color: #555;
-}
-
-/* Dark Mode Styles */
-body.dark-mode {
-    background-color: #121212;
-    color: #ffffff;
-}
-
-body.dark-mode .page-frame {
-    border-color: #444;
-}
-
-body.dark-mode .tagline {
-    color: #e0e0e0;
-}
-
-body.dark-mode .description {
-    color: #b0b0b0;
-}
-
-/* Media Queries for Mobile Responsiveness */
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
     .tagline {
         font-size: clamp(2rem, 5vw, 3.5rem);
@@ -314,12 +245,6 @@ body.dark-mode .description {
     .tagline-section {
         padding: 1.5rem 0.5rem;
     }
-
-    .system-menu {
-        top: 10px;
-        right: 10px;
-        width: 150px;
-    }
 }
 
 @media (max-width: 480px) {
@@ -334,4 +259,84 @@ body.dark-mode .description {
     .tagline-section {
         padding: 1rem 0.3rem;
     }
+}
+.about-me-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vh;
+    background: transparent;
+}
+
+.about-heading {
+    position: absolute;
+    top: 15%;
+    right: 2%;
+    text-align: right;
+    transform: translate(0, 0);
+    border-right: 5px solid white;
+    padding-right: 0.5rem;
+}
+
+.about-heading h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.2;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column; /* Stack About and Me */
+}
+
+.me-text {
+    color: white;
+}
+
+.about-text {
+    color: grey;
+}
+
+.about-content {
+    position: absolute;
+    top: 40%;
+    left: 2%;
+    width: 40%;
+    color: #ccc;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    line-height: 1.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-heading {
+        top: 28%;
+    }
+    .about-content {
+        top: 40%;
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-content {
+        left: 0;
+        width: 100%;
+        padding: 1rem;
+    }
+}
+
+/* Smooth fade-out effect for reloading */
+.fade-out {
+    transition: opacity 0.5s ease;
+    opacity: 0;
+}
+
+/* Splash screen effect */
+.slide-out {
+    transform: translateY(-100%);
+    transition: transform 1s ease;
+}
+.highlight {
+    background-color: #7e7e7e; /* Highlight color */
+    padding: 0 4px; /* Adds a slight padding to make it visually appealing */
+    font-weight: bold;
 }
