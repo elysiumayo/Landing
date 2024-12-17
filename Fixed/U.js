@@ -48,6 +48,17 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
+    resizeRenderer() {
+      this.renderer.setSize(
+        this.container.clientWidth,
+        this.container.clientHeight,
+      );
+      this.uniforms.iResolution.value.set(
+        this.container.clientWidth,
+        this.container.clientHeight,
+      );
+    }
+
     createShaderMaterial() {
       this.uniforms = {
         iTime: { value: 0 },
@@ -93,10 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const animate = () => {
         requestAnimationFrame(animate);
         this.uniforms.iTime.value = performance.now() * 0.001;
-        this.uniforms.iResolution.value.set(
-          this.container.clientWidth,
-          this.container.clientHeight,
-        );
         this.renderer.render(this.scene, this.camera);
       };
       animate();
@@ -106,22 +113,36 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize shader background
   const shaderBackground = new ShaderBackground(mainContent);
 
+  // Update shader background on window resize without reload
+  window.addEventListener("resize", () => {
+    shaderBackground.resizeRenderer();
+  });
+
   // Hide splash screen after 3 seconds with slide transition
   setTimeout(() => {
     splashScreen.classList.add("slide-out");
     setTimeout(() => (splashScreen.style.display = "none"), 1000);
   }, 3000);
 
-  // Handle Resize with smooth reload effect
-  let resizeTimeoutSmoothReload;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeoutSmoothReload);
-    resizeTimeoutSmoothReload = setTimeout(() => {
-      // Apply fade-out effect
-      document.body.classList.add("fade-out");
+  // Handle touch drag for scrolling functionality
+  const container = document.querySelector(".card-container");
+  let startX = 0;
+  let isDragging = false;
 
-      // Wait for fade-out to complete before reloading
-      setTimeout(() => window.location.reload(), 500);
-    }, 200);
+  container.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    isDragging = true;
+  });
+
+  container.addEventListener("touchmove", (e) => {
+    if (!isDragging) return;
+    const currentX = e.touches[0].clientX;
+    const diff = startX - currentX;
+    container.scrollLeft += diff;
+    startX = currentX;
+  });
+
+  container.addEventListener("touchend", () => {
+    isDragging = false;
   });
 });
