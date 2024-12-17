@@ -125,25 +125,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 200);
   });
 });
-document.addEventListener('DOMContentLoaded', () => {
-    const container = document.querySelector('.card-container');
-    let startX = 0;
-    let isDragging = false;
-
-    container.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-        isDragging = true;
-    });
-
-    container.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        const currentX = e.touches[0].clientX;
-        const diff = startX - currentX;
-        container.scrollLeft += diff;
-        startX = currentX;
-    });
-
-    container.addEventListener('touchend', () => {
-        isDragging = false;
-    });
-});
