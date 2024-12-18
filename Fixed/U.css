@@ -235,7 +235,9 @@ html {
         font-size: clamp(2rem, 5vw, 3.5rem);
         width: 95%;
     }
-
+    #quotes {
+        top: 23rem;
+    }
     .description {
         font-size: clamp(0.9rem, 3vw, 1.2rem);
         width: 95%;
