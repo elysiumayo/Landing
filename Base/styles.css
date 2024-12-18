@@ -575,3 +575,27 @@ html {
         overflow-x: hidden;
     }
 }
+/* Paragraph Slide-In Animation */
+.about-content p {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.about-content p.slide-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Add a staggered delay for multiple paragraphs */
+.about-content p:nth-child(1) {
+    transition-delay: 0.2s;
+}
+
+.about-content p:nth-child(2) {
+    transition-delay: 0.4s;
+}
+
+.about-content p:nth-child(3) {
+    transition-delay: 0.6s;
+}
