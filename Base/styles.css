@@ -599,3 +599,27 @@ html {
 .about-content p:nth-child(3) {
     transition-delay: 0.6s;
 }
+/* Heading Slide-In Animation */
+.about-heading h2,
+.card-heading h2 {
+    opacity: 0;
+    transform: translateX(50px); /* Start off-screen to the right */
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.about-heading h2.slide-in,
+.card-heading h2.slide-in {
+    opacity: 1;
+    transform: translateX(0); /* Slide to original position */
+}
+
+/* Add staggered delay for multiple headings */
+.about-heading h2:nth-child(1),
+.card-heading h2:nth-child(1) {
+    transition-delay: 0.2s;
+}
+
+.about-heading h2:nth-child(2),
+.card-heading h2:nth-child(2) {
+    transition-delay: 0.4s;
+}
