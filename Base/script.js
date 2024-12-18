@@ -133,85 +133,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Typing Animation Module
-  const typingAnimation = {
-    /**
-     * Create typing animation for headings
-     * @param {NodeListOf<Element>} headings - Headings to animate
-     */
-    init(headings) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const heading = entry.target;
-              if (!heading.classList.contains('typing-animated')) {
-                this.animateTyping(heading);
-                heading.classList.add('typing-animated');
-              }
-            }
-          });
-        },
-        { threshold: 0.1 }
-      );
+  // Scroll-based Animations
+  const scrollAnimations = {
+    init() {
+      const paragraphs = document.querySelectorAll('.about-content p');
+      const headings = document.querySelectorAll('.about-heading h2, .card-heading h2');
 
-      headings.forEach((heading) => observer.observe(heading));
-    },
-
-    /**
-     * Animate typing for a specific heading
-     * @param {HTMLElement} element - Heading element to animate
-     */
-    animateTyping(element) {
-      const meText = element.querySelector('.me-text');
-      const aboutText = element.querySelector('.about-text');
-      
-      if (!meText || !aboutText) return;
-
-      const meTextContent = meText.textContent;
-      const aboutTextContent = aboutText.textContent;
-
-      meText.textContent = '';
-      aboutText.textContent = '';
-
-      this.typeBothTexts(meText, aboutText, meTextContent, aboutTextContent);
-    },
-
-    /**
-     * Type both texts simultaneously
-     * @param {HTMLElement} meTextElement - Me text element
-     * @param {HTMLElement} aboutTextElement - About text element
-     * @param {string} meTextContent - Me text content
-     * @param {string} aboutTextContent - About text content
-     */
-    typeBothTexts(meTextElement, aboutTextElement, meTextContent, aboutTextContent) {
-      let meIndex = 0;
-      let aboutIndex = 0;
-
-      const type = () => {
-        let meTyped = false;
-        let aboutTyped = false;
-
-        if (meIndex < meTextContent.length) {
-          meTextElement.textContent += meTextContent.charAt(meIndex);
-          meIndex++;
-        } else {
-          meTyped = true;
-        }
-
-        if (aboutIndex < aboutTextContent.length) {
-          aboutTextElement.textContent += aboutTextContent.charAt(aboutIndex);
-          aboutIndex++;
-        } else {
-          aboutTyped = true;
-        }
-
-        if (!meTyped || !aboutTyped) {
-          setTimeout(type, Math.random() * 20 + 20);
-        }
+      const observerOptions = {
+        threshold: 0.1
       };
 
-      type();
+      const paragraphObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const paragraph = entry.target;
+            if (!paragraph.classList.contains('animated')) {
+              paragraph.classList.add('slide-in', 'animated');
+            }
+          }
+        });
+      }, observerOptions);
+
+      const headingObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const heading = entry.target;
+            if (!heading.classList.contains('animated')) {
+              heading.classList.add('slide-in', 'animated');
+            }
+          }
+        });
+      }, observerOptions);
+
+      paragraphs.forEach(paragraph => paragraphObserver.observe(paragraph));
+      headings.forEach(heading => headingObserver.observe(heading));
     }
   };
 
@@ -252,33 +207,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }, config.timings.resizeDebounceDelay);
     window.addEventListener("resize", debouncedSmoothReload);
 
-    // Initialize typing animation
-    const headings = document.querySelectorAll('.about-heading h2, .card-heading h2');
-    typingAnimation.init(headings);
+    // Initialize scroll animations
+    scrollAnimations.init();
   }
 
   // Execute initialization
   init();
-});
-document.addEventListener('DOMContentLoaded', () => {
-    const paragraphs = document.querySelectorAll('.about-content p');
-    
-    // Intersection Observer for paragraphs
-    const paragraphObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const paragraph = entry.target;
-                if (!paragraph.classList.contains('animated')) {
-                    paragraph.classList.add('slide-in', 'animated');
-                }
-            }
-        });
-    }, {
-        threshold: 0.1 // Trigger when at least 10% of the element is visible
-    });
-
-    // Observe all paragraphs
-    paragraphs.forEach(paragraph => {
-        paragraphObserver.observe(paragraph);
-    });
 });
