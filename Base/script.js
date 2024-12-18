@@ -260,3 +260,25 @@ document.addEventListener("DOMContentLoaded", () => {
   // Execute initialization
   init();
 });
+document.addEventListener('DOMContentLoaded', () => {
+    const paragraphs = document.querySelectorAll('.about-content p');
+    
+    // Intersection Observer for paragraphs
+    const paragraphObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const paragraph = entry.target;
+                if (!paragraph.classList.contains('animated')) {
+                    paragraph.classList.add('slide-in', 'animated');
+                }
+            }
+        });
+    }, {
+        threshold: 0.1 // Trigger when at least 10% of the element is visible
+    });
+
+    // Observe all paragraphs
+    paragraphs.forEach(paragraph => {
+        paragraphObserver.observe(paragraph);
+    });
+});
