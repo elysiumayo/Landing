@@ -2,7 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no"
+        />
         <title>Elysium Ayo</title>
         <link
             href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
@@ -14,6 +17,11 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
         />
         <link rel="stylesheet" href="styles.css" />
+        <link
+            rel="icon"
+            type="image/png"
+            href="https://raw.githubusercontent.com/elysiumayo/elysiumayo/refs/heads/main/Page/tab.png"
+        />
     </head>
     <body>
         <!-- Splash Screen -->
@@ -51,27 +59,29 @@
                         <div class="about-heading">
                             <h2>
                                 <span class="me-text"
-                                    >Discovering Me Inside</span
+                                    >In The Kernal : Discovering</span
                                 >
-                                <span class="about-text">the Kernel</span>
+                                <span class="about-text">Me</span>
                             </h2>
                         </div>
                         <div class="about-content">
                             <p>
-                                I’m a curious mind exploring the intersection of
-                                technology, creativity, and philosophy. With a
-                                passion for open-source contributions and
-                                problem-solving, I approach every challenge as
-                                an opportunity to learn and grow. Technology,
-                                for me, is about storytelling, building
-                                connections, and solving puzzles. From tinkering
-                                with servers to contributing to projects, each
-                                step is a journey into discovery. When not
-                                coding, I reflect on life's complexities and
-                                explore the unknown. Every idea, server
-                                deployment, and solution adds a new layer to
-                                this path of exploration. Welcome to my corner
-                                of curiosity.
+                                I'm a curious soul navigating the quirky world
+                                of technology, creativity, and philosophy—think
+                                of me as a digital Indiana Jones, but with fewer
+                                snakes and more code. I dive into open-source
+                                projects and solve problems like a treasure
+                                hunt, except instead of gold, I find bugs and
+                                the occasional existential crisis. For me,
+                                technology is a giant puzzle, and I can’t resist
+                                trying to fit the pieces together, even if it
+                                means accidentally inventing a new way to toast
+                                bread. When I’m not tinkering with servers, I’m
+                                pondering life’s big questions, like why we park
+                                on driveways and drive on parkways. So, welcome
+                                to my corner of curiosity—where the Wi-Fi is
+                                strong, the ideas are wild, and the snacks are
+                                always within reach!
                             </p>
                         </div>
                     </section>
@@ -79,9 +89,9 @@
                         <div class="about-heading">
                             <h2>
                                 <span class="me-text"
-                                    >Exploring the Digital
+                                    >In The Kernal : Beyond the
                                 </span>
-                                <span class="about-text">Frontier</span>
+                                <span class="about-text">Screen</span>
                             </h2>
                         </div>
                         <div class="about-content">
@@ -91,8 +101,8 @@
                                 while avoiding accidental self-destruction<span
                                     class="highlight"
                                 >
-                                    (which happens when you mistype rm -rf
-                                    /)</span
+                                    ( which happens when you mistype rm -rf /
+                                    )</span
                                 >. I enjoy tinkering with new tools, upgrading
                                 my home server to make it faster, cooler, and
                                 less likely to plot a mutiny against me. Reading
@@ -111,9 +121,9 @@
                         <div class="card-heading">
                             <h2>
                                 <span class="me-text"
-                                    >Discovering Me Inside</span
+                                    >In the Lab : Current</span
                                 >
-                                <span class="about-text">the Kernel</span>
+                                <span class="about-text">Projects</span>
                             </h2>
                         </div>
                         <div class="cards-wrapper">
@@ -132,8 +142,8 @@
                                         menu script. Allows quick scanning,
                                         selection, and connection to Wi-Fi
                                         networks with a clean, intuitive
-                                        interface. Optimized for minimal setups
-                                        and ease of use.
+                                        interface. Optimized for minimal setups,
+                                        ease of use, and seamless configuration.
                                     </p>
                                     <div class="card-stats">
                                         <div class="stat">
@@ -141,15 +151,15 @@
                                             <span>Complexity Level</span>
                                             <div
                                                 class="stat-bar"
-                                                style="width: 85%"
+                                                id="c-rofi"
                                             ></div>
                                         </div>
                                         <div class="stat">
                                             <i class="fas fa-cogs"></i>
-                                            <span>Innovation Score</span>
+                                            <span>Status</span>
                                             <div
                                                 class="stat-bar"
-                                                style="width: 75%"
+                                                id="i-rofi"
                                             ></div>
                                         </div>
                                     </div>
@@ -187,15 +197,15 @@
                                             <span>Complexity Level</span>
                                             <div
                                                 class="stat-bar"
-                                                style="width: 90%"
+                                                id="c-arch"
                                             ></div>
                                         </div>
                                         <div class="stat">
                                             <i class="fas fa-cogs"></i>
-                                            <span>Innovation Score</span>
+                                            <span>Status</span>
                                             <div
                                                 class="stat-bar"
-                                                style="width: 80%"
+                                                id="i-arch"
                                             ></div>
                                         </div>
                                     </div>
@@ -235,15 +245,15 @@
                                             <span>Complexity Level</span>
                                             <div
                                                 class="stat-bar"
-                                                style="width: 95%"
+                                                id="c-artix"
                                             ></div>
                                         </div>
                                         <div class="stat">
                                             <i class="fas fa-cloud"></i>
-                                            <span>Innovation Score</span>
+                                            <span>Status</span>
                                             <div
                                                 class="stat-bar"
-                                                style="width: 85%"
+                                                id="i-artix"
                                             ></div>
                                         </div>
                                     </div>
@@ -281,15 +291,15 @@
                                             <span>Complexity Level</span>
                                             <div
                                                 class="stat-bar"
-                                                style="width: 80%"
+                                                id="c-dotfiles"
                                             ></div>
                                         </div>
                                         <div class="stat">
                                             <i class="fas fa-rocket"></i>
-                                            <span>Innovation Score</span>
+                                            <span>Status</span>
                                             <div
                                                 class="stat-bar"
-                                                style="width: 90%"
+                                                id="i-dotfiles"
                                             ></div>
                                         </div>
                                     </div>
@@ -318,7 +328,8 @@
                                         showcasing my projects, open-source
                                         contributions, and interests. Designed
                                         with simplicity, functionality, and a
-                                        focus on minimal aesthetics.
+                                        focus on minimal aesthetics and
+                                        responsive design principles.
                                     </p>
                                     <div class="card-stats">
                                         <div class="stat">
@@ -326,15 +337,15 @@
                                             <span>Complexity Level</span>
                                             <div
                                                 class="stat-bar"
-                                                style="width: 75%"
+                                                id="c-page"
                                             ></div>
                                         </div>
                                         <div class="stat">
                                             <i class="fas fa-users"></i>
-                                            <span>Innovation Score</span>
+                                            <span>Status</span>
                                             <div
                                                 class="stat-bar"
-                                                 id="stat-bar"
+                                                id="i-page"
                                             ></div>
                                         </div>
                                     </div>
@@ -353,9 +364,9 @@
                         <div class="about-heading">
                             <h2>
                                 <span class="me-text"
-                                    >In the Lab: Current
+                                    >In The Kernal : Current
                                 </span>
-                                <span class="about-text">Projects</span>
+                                <span class="about-text">Status</span>
                             </h2>
                         </div>
                         <div class="about-content">
@@ -382,7 +393,8 @@
                     <section class="tagline-section">
                         <div class="tagline-container">
                             <h1 class="tagline">
-                               This ‘Simple’ Page Holds a Million Lines of Thought
+                                This ‘Simple’ Page Holds a Million Lines of
+                                Thought
                             </h1>
                         </div>
                     </section>
@@ -393,17 +405,13 @@
         <!-- Links Container at Bottom Left -->
         <div class="links-container" id="linksContainer">
             <a
-                href="https://github.com/yourusername"
+                href="https://github.com/elysiumayo"
                 target="_blank"
                 id="githubLink"
             >
                 <i class="fab fa-github"></i> GitHub
             </a>
-            <a
-                href="mailto:youremail@example.com"
-                target="_blank"
-                id="emailLink"
-            >
+            <a href="mailto:zenost@proton.me" target="_blank" id="emailLink">
                 <i class="fas fa-envelope"></i> Email
             </a>
         </div>
