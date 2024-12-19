@@ -46,6 +46,7 @@ html {
     overflow-y: auto;
     scroll-behavior: smooth;
     height: 100%;
+      overflow-x: hidden;
 }
 
 .scrollable-content section {
