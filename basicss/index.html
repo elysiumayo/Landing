@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="HandheldFriendly" content="true">
+    <title>ElysiumAyo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+<body>
+    <!-- Splash Screen -->
+    <div class="splash">
+        <div class="scanline"></div>
+        <div class="noise"></div>
+        <div class="overlay"></div>
+        <canvas id="gridCanvas" class="grid-canvas"></canvas>
+        
+        <div class="splash-content">
+            <div class="title-container">
+                <div class="title-slice"></div>
+                <div class="title-main">
+                    <span class="title-top">Elysium</span>
+                    <span class="title-bottom">Ayo</span>
+                </div>
+            </div>
+            
+            <div class="loader">
+                <div class="loader-progress"></div>
+                <div class="loader-text">System Initialization</div>
+                <div class="loader-percentage">0%</div>
+            </div>
+
+            <div class="geometric-elements">
+                <div class="geo-line"></div>
+                <div class="geo-line-right"></div>
+                <div class="geo-circle"></div>
+                <div class="geo-square"></div>
+                <div class="geo-hexagon"></div>
+                <div class="geo-triangle"></div>
+                <div class="geo-dots"></div>
+                <div class="geo-cross"></div>
+                <div class="geo-diamond-grid">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="geo-rings"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content hidden">
+        <div class="frame">
+            <div class="frame-border frame-border-top"></div>
+            <div class="frame-border frame-border-right"></div>
+            <div class="frame-border frame-border-bottom"></div>
+            <div class="frame-border frame-border-left"></div>
+            <div class="frame-content">
+                <canvas id="shaderCanvas"></canvas>
+                <div class="sections-container">
+                    <section class="section" id="section1">
+                        <div id="kernel-container"></div>
+                        <div class="section-content">
+                            <div class="tagline-container">
+                                <h1 class="tagline" data-text="Crafting Digital Experiences">Crafting Digital Experiences</h1>
+                                <div class="tagline-underline"></div>
+                                <p class="description">Transforming ideas into seamless, innovative solutions. 
+                                Specializing in creating captivating digital experiences that push the boundaries 
+                                of web technology.</p>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="section" id="section2">
+                        <div class="section-content">
+                            <div class="about-container">
+                                <h2 class="about-title">About Me</h2>
+                                <div class="about-underline"></div>
+                                <p class="about-description">
+                                    A passionate software engineer with a keen eye for detail and a drive for innovation. 
+                                    Specializing in full-stack development, I blend creativity with technical expertise 
+                                    to craft seamless digital experiences. My journey in technology is fueled by continuous 
+                                    learning and the pursuit of excellence in every project I undertake.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="section" id="section3">
+                        <div class="section-content">
+                            <div class="hobbies-container">
+                                <h2 class="hobbies-title">Hobbies</h2>
+                                <div class="hobbies-underline"></div>
+                                <p class="hobbies-description">
+                                    Beyond coding, I find joy in exploring various interests. Photography allows me to capture 
+                                    moments and perspectives, while gaming fuels my creative problem-solving skills. I'm also 
+                                    passionate about music production and enjoy the art of creating digital soundscapes in my 
+                                    free time.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="section" id="section4">
+                        <div class="section-content">
+                            <div class="future-goals-container">
+                                <h2 class="future-goals-title">Future Goals</h2>
+                                <div class="future-goals-underline"></div>
+                                <p class="future-goals-description">
+                                    Aspiring to push the boundaries of technology and innovation. My goals include mastering 
+                                    advanced web technologies, contributing to open-source projects, and developing cutting-edge 
+                                    applications that make a meaningful impact. I'm committed to continuous learning and staying 
+                                    at the forefront of software development trends.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="section" id="section5">
+                        <div class="section-content">
+                            <div class="projects-container">
+                                <h2 class="projects-title">Projects</h2>
+                                <div class="projects-underline"></div>
+                                <div class="projects-carousel">
+                                    <div class="project-card" data-index="0">
+                                        <div class="project-image">
+                                            <img src="project1.jpg" alt="Project 1">
+                                        </div>
+                                        <div class="project-info">
+                                            <h3>Project One</h3>
+                                            <div class="project-icons">
+                                                <div class="project-icon">
+                                                    <i class="fas fa-react"></i>
+                                                </div>
+                                                <div class="project-icon">
+                                                    <i class="fab fa-node-js"></i>
+                                                </div>
+                                                <div class="project-icon">
+                                                    <i class="fab fa-css3-alt"></i>
+                                                </div>
+                                            </div>
+                                            <p>A sophisticated web application leveraging modern technologies.</p>
+                                            <div class="project-status">
+                                                <div class="status-bar">
+                                                    <div class="status-fill" style="width: 90%"></div>
+                                                </div>
+                                                <span class="status-text">90% Complete</span>
+                                            </div>
+                                            <div class="project-complexity">
+                                                <span>Complexity:</span>
+                                                <div class="complexity-dots">
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                    <span class="dot"></span>
+                                                    <span class="dot"></span>
+                                                </div>
+                                            </div>
+                                            <a href="https://github.com/yourusername/project1" class="github-link" target="_blank">View on GitHub</a>
+                                        </div>
+                                    </div>
+                                    <div class="project-card" data-index="1">
+                                        <div class="project-image">
+                                            <img src="project2.jpg" alt="Project 2">
+                                        </div>
+                                        <div class="project-info">
+                                            <h3>Project Two</h3>
+                                            <div class="project-icons">
+                                                <div class="project-icon">
+                                                    <i class="fas fa-react"></i>
+                                                </div>
+                                                <div class="project-icon">
+                                                    <i class="fab fa-node-js"></i>
+                                                </div>
+                                                <div class="project-icon">
+                                                    <i class="fab fa-css3-alt"></i>
+                                                </div>
+                                            </div>
+                                            <p>An innovative mobile-first responsive design system.</p>
+                                            <div class="project-status">
+                                                <div class="status-bar">
+                                                    <div class="status-fill" style="width: 75%"></div>
+                                                </div>
+                                                <span class="status-text">75% Complete</span>
+                                            </div>
+                                            <div class="project-complexity">
+                                                <span>Complexity:</span>
+                                                <div class="complexity-dots">
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                    <span class="dot"></span>
+                                                    <span class="dot"></span>
+                                                    <span class="dot"></span>
+                                                </div>
+                                            </div>
+                                            <a href="https://github.com/yourusername/project2" class="github-link" target="_blank">View on GitHub</a>
+                                        </div>
+                                    </div>
+                                    <div class="project-card" data-index="2">
+                                        <div class="project-image">
+                                            <img src="project3.jpg" alt="Project 3">
+                                        </div>
+                                        <div class="project-info">
+                                            <h3>Project Three</h3>
+                                            <div class="project-icons">
+                                                <div class="project-icon">
+                                                    <i class="fas fa-react"></i>
+                                                </div>
+                                                <div class="project-icon">
+                                                    <i class="fab fa-node-js"></i>
+                                                </div>
+                                                <div class="project-icon">
+                                                    <i class="fab fa-css3-alt"></i>
+                                                </div>
+                                            </div>
+                                            <p>A real-time data visualization dashboard.</p>
+                                            <div class="project-status">
+                                                <div class="status-bar">
+                                                    <div class="status-fill" style="width: 100%"></div>
+                                                </div>
+                                                <span class="status-text">Completed</span>
+                                            </div>
+                                            <div class="project-complexity">
+                                                <span>Complexity:</span>
+                                                <div class="complexity-dots">
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                    <span class="dot"></span>
+                                                </div>
+                                            </div>
+                                            <a href="https://github.com/yourusername/project3" class="github-link" target="_blank">View on GitHub</a>
+                                        </div>
+                                    </div>
+                                    <div class="project-card" data-index="3">
+                                        <div class="project-image">
+                                            <img src="project4.jpg" alt="Project 4">
+                                        </div>
+                                        <div class="project-info">
+                                            <h3>Project Four</h3>
+                                            <div class="project-icons">
+                                                <div class="project-icon">
+                                                    <i class="fas fa-react"></i>
+                                                </div>
+                                                <div class="project-icon">
+                                                    <i class="fab fa-node-js"></i>
+                                                </div>
+                                                <div class="project-icon">
+                                                    <i class="fab fa-css3-alt"></i>
+                                                </div>
+                                            </div>
+                                            <p>An AI-powered content management system.</p>
+                                            <div class="project-status">
+                                                <div class="status-bar">
+                                                    <div class="status-fill" style="width: 60%"></div>
+                                                </div>
+                                                <span class="status-text">60% Complete</span>
+                                            </div>
+                                            <div class="project-complexity">
+                                                <span>Complexity:</span>
+                                                <div class="complexity-dots">
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                </div>
+                                            </div>
+                                            <a href="https://github.com/yourusername/project4" class="github-link" target="_blank">View on GitHub</a>
+                                        </div>
+                                    </div>
+                                    <div class="project-card" data-index="4">
+                                        <div class="project-image">
+                                            <img src="project5.jpg" alt="Project 5">
+                                        </div>
+                                        <div class="project-info">
+                                            <h3>Project Five</h3>
+                                            <div class="project-icons">
+                                                <div class="project-icon">
+                                                    <i class="fas fa-react"></i>
+                                                </div>
+                                                <div class="project-icon">
+                                                    <i class="fab fa-node-js"></i>
+                                                </div>
+                                                <div class="project-icon">
+                                                    <i class="fab fa-css3-alt"></i>
+                                                </div>
+                                            </div>
+                                            <p>A blockchain-based authentication system.</p>
+                                            <div class="project-status">
+                                                <div class="status-bar">
+                                                    <div class="status-fill" style="width: 40%"></div>
+                                                </div>
+                                                <span class="status-text">40% Complete</span>
+                                            </div>
+                                            <div class="project-complexity">
+                                                <span>Complexity:</span>
+                                                <div class="complexity-dots">
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                    <span class="dot active"></span>
+                                                    <span class="dot"></span>
+                                                    <span class="dot"></span>
+                                                </div>
+                                            </div>
+                                            <a href="https://github.com/yourusername/project5" class="github-link" target="_blank">View on GitHub</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="section" id="section6">
+                        <div class="section-content">
+                            <h2>Section 6</h2>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js" defer></script>
+</body>
+</html>
